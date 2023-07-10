@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.vac.professionplugin.ProfessionManager;
 
@@ -48,7 +49,8 @@ public class SetProfessionCommand implements CommandExecutor
                     return true;
                 }
 
-                ProfessionManager.getInstance().openProfessionInventory(targetPlayer);
+                //ProfessionManager.getInstance().openProfessionInventory(targetPlayer);
+                ProfessionManager.getInstance().getInventoryController().openSetProfessioInventory(targetPlayer);
             }
             catch (SQLException e)
             {

@@ -3,6 +3,8 @@ package org.vac.professionplugin.professions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -150,23 +152,8 @@ public class Miner extends Profession {
     @Override
     public void Level5Reward()
     {
-        getPlayer().setWalkSpeed(0.4f);
-
-//        // Crea una nueva tarea programada para repetir el efecto cada 5 minutos
-//        BukkitRunnable repeatTask = new BukkitRunnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                // Aplica el efecto de velocidad nuevamente
-//                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, EFFECT_DURATION, 1));
-//            }
-//        };
-//
-//        ProfessionManager professionManager = ProfessionManager.getInstance();
-//
-//        // agregar la tarea de repetición al professionManager
-//        professionManager.addRepeatTasks(repeatTask);
+        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+        Objects.requireNonNull(attribute).setBaseValue(4.5f);
     }
 
     @Override
@@ -178,7 +165,8 @@ public class Miner extends Profession {
     @Override
     public void Level15Reward()
     {
-
+        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+        Objects.requireNonNull(attribute).setBaseValue(5.5f);
     }
 
     @Override

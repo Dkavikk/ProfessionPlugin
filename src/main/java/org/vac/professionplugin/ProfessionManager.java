@@ -33,6 +33,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
     private static ProfessionManager instance;
     private static Connection connection;
 
+    private ProfessionInventoryController inventoryController;
     private List<BukkitRunnable>repeatTasks;
 
     private Inventory professioTypeInventory;
@@ -45,6 +46,10 @@ public class ProfessionManager extends JavaPlugin implements Listener
     public static ProfessionManager getInstance()
     {
         return instance;
+    }
+    public ProfessionInventoryController getInventoryController()
+    {
+        return inventoryController;
     }
     public void addRepeatTasks(BukkitRunnable task)
     {
@@ -63,6 +68,9 @@ public class ProfessionManager extends JavaPlugin implements Listener
         String password = "Indiopicaro.1";
 
         repeatTasks = new ArrayList<>();
+
+        inventoryController = new ProfessionInventoryController();
+        inventoryController.CreateSetProfessionInventory();
 
         try
         {
@@ -145,74 +153,81 @@ public class ProfessionManager extends JavaPlugin implements Listener
         }
 
     }
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory() == professioTypeInventory) {
+        if (event.getInventory() == inventoryController.getSetProfessioInventory())
+        {
             event.setCancelled(true);
-
-            if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR) {
-                Player targetPlayer = (Player) event.getWhoClicked();
-                String professionName = "";
-
-                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + " "))
-                {
-                    return;
-                }
-
-                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Minero"))
-                {
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Minero");
-                    professionName = "Minero";
-                }
-                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Leñador"))
-                {
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Leñador");
-                    professionName = "Leñador";
-                }
-                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Granjero"))
-                {
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Granjero");
-                    professionName = "Granjero";
-                }
-                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Cazador"))
-                {
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Cazador");
-                    professionName = "Cazador";
-                }
-                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Constructor"))
-                {
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Constructor");
-                    professionName = "Constructor";
-                }
-
-                try
-                {
-                    // Guardar la profesión en la base de datos
-                    PreparedStatement statement = connection.prepareStatement(
-                            "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) VALUES (?, ?, ?, ?)"
-                    );
-                    statement.setString(1, targetPlayer.getUniqueId().toString());
-                    statement.setString(2, professionName);
-                    statement.setInt(3, 1);
-                    statement.setFloat(4, 1);
-
-                    statement.executeUpdate();
-                    statement.close();
-
-                    targetPlayer.sendMessage(ChatColor.GREEN + "Profesión establecida con éxito para el jugador " + targetPlayer.getName() +
-                            ": " + professionName);
-                }
-                catch (SQLException e)
-                {
-                    targetPlayer.sendMessage(ChatColor.RED + "Failed to set profession: " + e.getMessage());
-                }
-
-                targetPlayer.closeInventory();
-
-            }
+            inventoryController.OnSetProfessioInventory(event);
         }
     }
+//    @EventHandler
+//    public void onInventoryClick(InventoryClickEvent event) {
+//        if (event.getInventory() == professioTypeInventory) {
+//            event.setCancelled(true);
+//
+//            if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR) {
+//                Player targetPlayer = (Player) event.getWhoClicked();
+//                String professionName = "";
+//
+//                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + " "))
+//                {
+//                    return;
+//                }
+//
+//                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Minero"))
+//                {
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Minero");
+//                    professionName = "Minero";
+//                }
+//                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Leñador"))
+//                {
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Leñador");
+//                    professionName = "Leñador";
+//                }
+//                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Granjero"))
+//                {
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Granjero");
+//                    professionName = "Granjero";
+//                }
+//                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Cazador"))
+//                {
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Cazador");
+//                    professionName = "Cazador";
+//                }
+//                else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Constructor"))
+//                {
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Constructor");
+//                    professionName = "Constructor";
+//                }
+//
+//                try
+//                {
+//                    // Guardar la profesión en la base de datos
+//                    PreparedStatement statement = connection.prepareStatement(
+//                            "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) VALUES (?, ?, ?, ?)"
+//                    );
+//                    statement.setString(1, targetPlayer.getUniqueId().toString());
+//                    statement.setString(2, professionName);
+//                    statement.setInt(3, 1);
+//                    statement.setFloat(4, 1);
+//
+//                    statement.executeUpdate();
+//                    statement.close();
+//
+//                    targetPlayer.sendMessage(ChatColor.GREEN + "Profesión establecida con éxito para el jugador " + targetPlayer.getName() +
+//                            ": " + professionName);
+//                }
+//                catch (SQLException e)
+//                {
+//                    targetPlayer.sendMessage(ChatColor.RED + "Failed to set profession: " + e.getMessage());
+//                }
+//
+//                targetPlayer.closeInventory();
+//
+//            }
+//        }
+//    }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
@@ -345,6 +360,15 @@ public class ProfessionManager extends JavaPlugin implements Listener
         professioTypeInventory.setItem(7, emptyItem);
         professioTypeInventory.setItem(8, emptyItem);
 
+
+        player.openInventory(professioTypeInventory);
+    }
+
+    public void openGetProfessionInventory(Player player)
+    {
+        // Nombre de la profesion
+        // nivel
+        // experiencia
 
         player.openInventory(professioTypeInventory);
     }
