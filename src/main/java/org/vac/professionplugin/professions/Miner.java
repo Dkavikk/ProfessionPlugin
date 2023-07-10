@@ -31,33 +31,10 @@ public class Miner extends Profession {
     {
         Block block = event.getBlock();
         Material blockType = block.getType();
-//        if (getExperienceByBlock(blockType) > -1)
-//        {
-//            increaseExperience(getExperienceByBlock(blockType));
-//        }
-//        else
-//        {
-//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No se a ecotrado el material " + blockType.getData().getName());
-//        }
-//
-//        Material material = getAdditionalOre(blockType);
-//        if (material != null)
-//        {
-//            Random random = new Random();
-//            if (random.nextDouble() <= getChanceAdditionalOre(material))
-//            {
-//                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
-//            }
-//        }
-
         float xp = -1;
         boolean allowed_duplicate = false;
         String material_duplicate = "";
         double chance = 0;
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "____");
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1" + blockType.name());
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "_____");
 
         try
         {
