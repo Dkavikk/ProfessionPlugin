@@ -1,0 +1,21 @@
+name: ProfessionPlugin
+version: '${project.version}'
+main: org.vac.professionplugin.ProfessionManager
+api-version: '1.20'
+
+commands:
+  setprofesion:
+    description: Selecion de Profecion
+    usage: /<command> <profesio>
+
+  getprofesion:
+    description: obtencion de Profecion
+    usage: /<command>
+
+  salirprofesion:
+    description: Dejar de trabajar
+    usage: /<command>
+
+  test:
+    description: comandos para test
+    usage: /<command>
