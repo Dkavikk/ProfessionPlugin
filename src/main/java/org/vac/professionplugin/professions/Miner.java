@@ -105,6 +105,11 @@ public class Miner extends Profession {
             }
         }
 
+
+        if (menirarAllowedForExtraExperience(blockType))
+        {
+            getPlayer().giveExp(calculateExperienceByLVL());
+        }
     }
 
     @Override
@@ -148,33 +153,57 @@ public class Miner extends Profession {
     @Override
     public void Level5Reward()
     {
-        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-        Objects.requireNonNull(attribute).setBaseValue(4.5f);
+
     }
 
     @Override
     public void Level10Reward()
     {
-
+        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
+        Objects.requireNonNull(attribute).setBaseValue(attribute.getValue() + 1);
     }
 
     @Override
     public void Level15Reward()
     {
-        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-        Objects.requireNonNull(attribute).setBaseValue(5.5f);
     }
 
     @Override
     public void Level20Reward()
     {
-        ItemStack pickaxeItemStack = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-        ItemStack netheriteItemStack = new ItemStack(Material.NETHERITE_SCRAP, 1);
-        ItemStack netheriteUpgradeItemStack = new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1);
+    }
 
-        getPlayer().getInventory().addItem(pickaxeItemStack);
-        getPlayer().getInventory().addItem(netheriteItemStack);
-        getPlayer().getInventory().addItem(netheriteUpgradeItemStack);
+    private boolean menirarAllowedForExtraExperience(Material material) {
+        // List of minerals that give experience when mined
+        return material == Material.COAL_ORE ||
+                material == Material.IRON_ORE ||
+                material == Material.COPPER_ORE ||
+                material == Material.GOLD_ORE ||
+                material == Material.DIAMOND_ORE ||
+                material == Material.ANCIENT_DEBRIS ||
+                material == Material.EMERALD_ORE;
+    }
+
+    private int calculateExperienceByLVL()
+    {
+        if (getLevel() >= 5 && getLevel() < 10)
+        {
+            return 5;
+        }
+        else if (getLevel() >= 10 && getLevel() < 15)
+        {
+            return 8;
+        }
+        else if (getLevel() >= 15 && getLevel() < 20)
+        {
+            return 11;
+        }
+        else if (getLevel() >= 20)
+        {
+            return 13;
+        }
+
+        return 0;
     }
 }
 

@@ -1,4 +1,4 @@
-package org.vac.professionplugin;
+package org.vac.professionplugin.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,9 +11,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.vac.professionplugin.ProfessionManager;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ProfessionInventoryController implements Listener
@@ -93,13 +97,13 @@ public class ProfessionInventoryController implements Listener
     {
         setProfessioInventory = ProfessionManager.getInstance().getServer().createInventory(null, 9, ChatColor.BOLD + "Profesiones");
 
-        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, "");
+        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, "", "");
 
-        ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, "Minero");
-        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador");
-        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, "Granjero");
-        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, "Cazador");
-        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, "Constructor");
+        ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, "Minero", LoreItemInventory.LORE_MINER_PROFESSION);
+        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador", "");
+        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, "Granjero", "");
+        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, "Cazador", LoreItemInventory.LORE_HUNTER_PROFESSION);
+        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, "Constructor", "");
 
         setProfessioInventory.setItem(0, emptyItem);
         setProfessioInventory.setItem(1, emptyItem);
@@ -119,11 +123,17 @@ public class ProfessionInventoryController implements Listener
 
 
 
-    private ItemStack createProfessionTypeItem(Material material, String name)
+    private ItemStack createProfessionTypeItem(Material material, @NotNull String name, String description)
     {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        Objects.requireNonNull(meta).setDisplayName(ChatColor.YELLOW + name);
+        Objects.requireNonNull(meta).setDisplayName(ChatColor.GREEN + name);
+
+        List<String> lore = new ArrayList<>();
+        lore.add(description);
+        meta.setLore(lore);
+
+
         item.setItemMeta(meta);
 
         return item;

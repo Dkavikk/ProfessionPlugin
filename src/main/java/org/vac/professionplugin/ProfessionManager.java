@@ -3,16 +3,13 @@ package org.vac.professionplugin;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.vac.professionplugin.commands.*;
+import org.vac.professionplugin.inventory.ProfessionInventoryController;
 import org.vac.professionplugin.professions.Profession;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,7 +72,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
         try
         {
             connection = DriverManager.getConnection(databaseURL, username, password);
-            Bukkit.getConsoleSender().sendMessage("[ProfessionPlugin] "+ ChatColor.GREEN + "Connected to the database!");
             Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
             //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
             Objects.requireNonNull(getCommand("getprofesion")).setExecutor(new GetProfessionCommand());
@@ -84,6 +80,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
             //Objects.requireNonNull(getCommand("test")).setExecutor(this);
 
             getServer().getPluginManager().registerEvents(this, this);
+            Bukkit.getConsoleSender().sendMessage("[ProfessionPlugin] "+ ChatColor.GREEN + "Connected to the database!");
         }
         catch (SQLException e)
         {

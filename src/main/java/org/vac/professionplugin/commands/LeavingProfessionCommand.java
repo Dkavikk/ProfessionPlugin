@@ -43,11 +43,11 @@ public class LeavingProfessionCommand implements CommandExecutor
 
                 if (rowsAffected > 0)
                 {
-                    sender.sendMessage(ChatColor.GREEN + "You have left your profession!");
+                    sender.sendMessage(ChatColor.GREEN + "¡Has dejado tu profesión!");
                 }
                 else
                 {
-                    sender.sendMessage(ChatColor.RED + "You don't have a profession to leave!");
+                    sender.sendMessage(ChatColor.RED + "¡No tienes una profesión que dejar!");
                 }
             }
             catch (SQLException e)
