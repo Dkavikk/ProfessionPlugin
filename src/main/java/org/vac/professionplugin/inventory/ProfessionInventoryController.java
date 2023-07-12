@@ -133,6 +133,7 @@ public class ProfessionInventoryController implements Listener
         lore.add(description);
         meta.setLore(lore);
 
+        meta.setCustomModelData(123);
 
         item.setItemMeta(meta);
 
