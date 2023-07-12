@@ -43,27 +43,22 @@ public class ProfessionInventoryController implements Listener
 
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Minero"))
             {
-                targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Minero");
                 professionName = "Minero";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Leñador"))
             {
-                targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Leñador");
                 professionName = "Leñador";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Granjero"))
             {
-                targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Granjero");
                 professionName = "Granjero";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Cazador"))
             {
-                targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Cazador");
                 professionName = "Cazador";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Constructor"))
             {
-                targetPlayer.sendMessage(ChatColor.GREEN + "Se ha selecionado la professio Constructor");
                 professionName = "Constructor";
             }
 
