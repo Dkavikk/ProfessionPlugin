@@ -7,17 +7,21 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.nio.DoubleBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -33,7 +37,9 @@ public class Miner extends Profession {
     {
         Block block = event.getBlock();
         Material blockType = block.getType();
+
         float xp = -1;
+        boolean allowed_luminarita_elfica = false;
         boolean allowed_duplicate = false;
         String material_duplicate = "";
         double chance = 0;
@@ -41,7 +47,7 @@ public class Miner extends Profession {
         try
         {
             PreparedStatement statement = ProfessionManager.getConnection().prepareStatement(
-                    "SELECT xp, allowed_duplicate, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
+                    "SELECT xp, allowed_luminarita_elfica ,allowed_duplicate, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
             );
             statement.setString(1, blockType.name());
             ResultSet resultSet = statement.executeQuery();
@@ -49,6 +55,7 @@ public class Miner extends Profession {
             if (resultSet.next())
             {
                 xp = resultSet.getFloat("xp");
+                allowed_luminarita_elfica = resultSet.getBoolean("allowed_luminarita_elfica");
                 allowed_duplicate = resultSet.getBoolean("allowed_duplicate");
                 //allowed_duplicate = resultSet.getInt("allowed_duplicate") == 1;
                 material_duplicate = resultSet.getString("material_duplicate");
@@ -92,6 +99,15 @@ public class Miner extends Profession {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
         }
 
+        if (allowed_luminarita_elfica)
+        {
+            Random random = new Random();
+            if (random.nextDouble() <= 0.0001f)
+            {
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), CreateLuminaritaElfica());
+            }
+        }
+
         if (allowed_duplicate)
         {
             Material material = Material.getMaterial(material_duplicate);
@@ -104,7 +120,6 @@ public class Miner extends Profession {
                 }
             }
         }
-
 
         if (menirarAllowedForExtraExperience(blockType))
         {
@@ -124,6 +139,8 @@ public class Miner extends Profession {
     @Override
     public void newLevel()
     {
+        // TODO Add money economy system
+
         if (getLevel() == 5)
         {
             Level5Reward();
@@ -204,6 +221,24 @@ public class Miner extends Profession {
         }
 
         return 0;
+    }
+
+    private ItemStack CreateLuminaritaElfica()
+    {
+        ItemStack item = new ItemStack(Material.PRISMARINE_SHARD);
+        ItemMeta meta = item.getItemMeta();
+
+        String description = "";
+        List<String> lore = new ArrayList<>();
+        lore.add(description);
+
+        Objects.requireNonNull(meta).setDisplayName(ChatColor.DARK_PURPLE + "Luminarita Elfica");
+        Objects.requireNonNull(meta).setLore(lore);
+        Objects.requireNonNull(meta).setCustomModelData(1);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 }
 

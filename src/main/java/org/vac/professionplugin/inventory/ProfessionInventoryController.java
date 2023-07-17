@@ -127,13 +127,12 @@ public class ProfessionInventoryController implements Listener
     {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        Objects.requireNonNull(meta).setDisplayName(ChatColor.GREEN + name);
 
         List<String> lore = new ArrayList<>();
         lore.add(description);
-        meta.setLore(lore);
 
-        meta.setCustomModelData(123);
+        Objects.requireNonNull(meta).setLore(lore);
+        Objects.requireNonNull(meta).setDisplayName(ChatColor.GREEN + name);
 
         item.setItemMeta(meta);
 
