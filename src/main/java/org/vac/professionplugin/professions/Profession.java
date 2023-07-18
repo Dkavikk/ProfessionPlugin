@@ -2,9 +2,11 @@ package org.vac.professionplugin.professions;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.vac.professionplugin.ProfessionManager;
 
 public abstract class Profession {
     private final String name;
@@ -87,8 +89,14 @@ public abstract class Profession {
         }
     }
 
-    public abstract void performProfessionAction(BlockBreakEvent event);
-    public abstract void performProfessionAction(EntityDeathEvent event);
+    public void performProfessionAction(BlockBreakEvent event)
+    {
+        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
+    }
+    public void performProfessionAction(EntityDeathEvent event)
+    {
+        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
+    }
     public abstract void newLevel();
     public abstract void startRepeatTasks();
     public abstract void Level5Reward();

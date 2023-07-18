@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.vac.professionplugin.MinerProfessionData;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.nio.DoubleBuffer;
@@ -25,7 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class Miner extends Profession {
+public class Miner extends Profession
+{
     public Miner(int level, float exp, Player player)
     {
         super("Minero", level, exp, player);
@@ -37,69 +39,37 @@ public class Miner extends Profession {
     {
         Block block = event.getBlock();
         Material blockType = block.getType();
-
-        float xp = -1;
-        boolean allowed_luminarita_elfica = false;
-        boolean allowed_duplicate = false;
-        String material_duplicate = "";
         double chance = 0;
 
-        try
+        MinerProfessionData minerProfessionData = ProfessionManager.getInstance().getDataBase().getMinerProfessionData(block);
+
+        if (getLevel() >= 5)
         {
-            PreparedStatement statement = ProfessionManager.getConnection().prepareStatement(
-                    "SELECT xp, allowed_luminarita_elfica ,allowed_duplicate, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
-            );
-            statement.setString(1, blockType.name());
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next())
-            {
-                xp = resultSet.getFloat("xp");
-                allowed_luminarita_elfica = resultSet.getBoolean("allowed_luminarita_elfica");
-                allowed_duplicate = resultSet.getBoolean("allowed_duplicate");
-                //allowed_duplicate = resultSet.getInt("allowed_duplicate") == 1;
-                material_duplicate = resultSet.getString("material_duplicate");
-
-                if (getLevel() >= 5)
-                {
-                    chance = resultSet.getDouble("chance_lvl5");
-                }
-                else if (getLevel() >= 10)
-                {
-                    chance = resultSet.getDouble("chance_lvl10");
-                }
-                else if (getLevel() >= 15)
-                {
-                    chance = resultSet.getDouble("chance_lvl15");
-                }
-                else if (getLevel() >= 20)
-                {
-                    chance = resultSet.getDouble("chance_lvl20");
-                }
-            }
-            else
-            {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
-            }
-
-            resultSet.close();
-            statement.close();
+            chance = minerProfessionData.chanceLVL5;
         }
-        catch (SQLException e)
+        else if (getLevel() >= 10)
         {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get miner_profession: " + e.getMessage());
+            chance = minerProfessionData.chanceLVL10;
+        }
+        else if (getLevel() >= 15)
+        {
+            chance = minerProfessionData.chanceLVL15;
+        }
+        else if (getLevel() >= 20)
+        {
+            chance = minerProfessionData.chanceLVL20;
         }
 
-        if (xp > -1)
+        if (minerProfessionData.xp > -1)
         {
-            increaseExperience(xp);
+            increaseExperience(minerProfessionData.xp);
         }
         else
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
         }
 
-        if (allowed_luminarita_elfica)
+        if (minerProfessionData.allowedLuminaritaElfica)
         {
             Random random = new Random();
             if (random.nextDouble() <= 0.0001f)
@@ -108,9 +78,9 @@ public class Miner extends Profession {
             }
         }
 
-        if (allowed_duplicate)
+        if (minerProfessionData.allowedDuplicate)
         {
-            Material material = Material.getMaterial(material_duplicate);
+            Material material = Material.getMaterial(minerProfessionData.materialDuplicate);
             Random random = new Random();
             if (material != null)
             {
@@ -125,6 +95,8 @@ public class Miner extends Profession {
         {
             getPlayer().giveExp(calculateExperienceByLVL());
         }
+
+        super.performProfessionAction(event);
     }
 
     @Override
