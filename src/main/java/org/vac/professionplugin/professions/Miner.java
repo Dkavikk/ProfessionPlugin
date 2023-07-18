@@ -91,7 +91,7 @@ public class Miner extends Profession
             }
         }
 
-        if (menirarAllowedForExtraExperience(blockType))
+        if (minerProfessionData.allowedExtraExperience)
         {
             getPlayer().giveExp(calculateExperienceByLVL());
         }
@@ -135,61 +135,46 @@ public class Miner extends Profession
     }
 
     @Override
-    public void startRepeatTasks()
-    {
-    }
-
-    @Override
     public void Level5Reward()
     {
-
+        // TODO Insignia de profesion lvl 5
     }
 
     @Override
     public void Level10Reward()
     {
-        AttributeInstance attribute = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
-        Objects.requireNonNull(attribute).setBaseValue(attribute.getValue() + 1);
+        // TODO Insignia de profesion lvl 10
     }
 
     @Override
     public void Level15Reward()
     {
+        // TODO Insignia de profesion lvl 15
     }
 
     @Override
     public void Level20Reward()
     {
-    }
-
-    private boolean menirarAllowedForExtraExperience(Material material) {
-        // List of minerals that give experience when mined
-        return material == Material.COAL_ORE ||
-                material == Material.IRON_ORE ||
-                material == Material.COPPER_ORE ||
-                material == Material.GOLD_ORE ||
-                material == Material.DIAMOND_ORE ||
-                material == Material.ANCIENT_DEBRIS ||
-                material == Material.EMERALD_ORE;
+        // TODO Insignia de profesion lvl 20
     }
 
     private int calculateExperienceByLVL()
     {
         if (getLevel() >= 5 && getLevel() < 10)
         {
-            return 5;
+            return 3;
         }
         else if (getLevel() >= 10 && getLevel() < 15)
         {
-            return 8;
+            return 5;
         }
         else if (getLevel() >= 15 && getLevel() < 20)
         {
-            return 11;
+            return 8;
         }
         else if (getLevel() >= 20)
         {
-            return 13;
+            return 10;
         }
 
         return 0;

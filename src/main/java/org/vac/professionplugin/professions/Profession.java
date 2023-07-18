@@ -98,7 +98,6 @@ public abstract class Profession {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
     public abstract void newLevel();
-    public abstract void startRepeatTasks();
     public abstract void Level5Reward();
     public abstract void Level10Reward();
     public abstract void Level15Reward();

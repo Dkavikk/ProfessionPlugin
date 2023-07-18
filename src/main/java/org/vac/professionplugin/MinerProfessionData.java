@@ -6,6 +6,7 @@ public class MinerProfessionData
     public float xp;
     public boolean allowedLuminaritaElfica;
     public boolean allowedDuplicate;
+    public boolean allowedExtraExperience;
     public String materialDuplicate;
     public double chanceLVL5;
     public double chanceLVL10;
@@ -13,12 +14,13 @@ public class MinerProfessionData
     public double chanceLVL20;
 
 
-    public MinerProfessionData(String materialName, float xp, boolean allowedLuminaritaElfica, boolean allowedDuplicate, String materialDuplicate, double chanceLVL5, double chanceLVL10, double chanceLVL15, double chanceLVL20)
+    public MinerProfessionData(String materialName, float xp, boolean allowedLuminaritaElfica, boolean allowedDuplicate, boolean allowedExtraExperience,String materialDuplicate, double chanceLVL5, double chanceLVL10, double chanceLVL15, double chanceLVL20)
     {
         this.materialName = materialName;
         this.xp = xp;
         this.allowedLuminaritaElfica = allowedLuminaritaElfica;
         this.allowedDuplicate = allowedDuplicate;
+        this.allowedExtraExperience = allowedExtraExperience;
         this.materialDuplicate = materialDuplicate;
         this.chanceLVL5 = chanceLVL5;
         this.chanceLVL10 = chanceLVL10;

@@ -127,7 +127,7 @@ public class ProfessionDataBase
         try
         {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT xp, allowed_luminarita_elfica ,allowed_duplicate, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
+                    "SELECT xp, allowed_luminarita_elfica ,allowed_duplicate, material_duplicate, allowed_extra_experience,chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
             );
             statement.setString(1, block.getType().name());
             ResultSet resultSet = statement.executeQuery();
@@ -139,6 +139,7 @@ public class ProfessionDataBase
                         resultSet.getFloat("xp"),
                         resultSet.getBoolean("allowed_luminarita_elfica"),
                         resultSet.getBoolean("allowed_duplicate"),
+                        resultSet.getBoolean("allowed_extra_experience"),
                         resultSet.getString("material_duplicate"),
                         resultSet.getDouble("chance_lvl5"),
                         resultSet.getDouble("chance_lvl10"),
