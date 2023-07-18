@@ -185,7 +185,9 @@ public class Miner extends Profession
         ItemStack item = new ItemStack(Material.PRISMARINE_SHARD);
         ItemMeta meta = item.getItemMeta();
 
-        String description = "";
+        String description =
+                "Mineral extremadamente raro y poderoso" +
+                "se deconose su uso, pero se siente supoder";
         List<String> lore = new ArrayList<>();
         lore.add(description);
 
