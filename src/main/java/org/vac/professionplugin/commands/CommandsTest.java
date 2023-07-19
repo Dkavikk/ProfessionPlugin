@@ -25,7 +25,7 @@ public class CommandsTest implements CommandExecutor
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El " + player.getName() + " trato de usar el comando /test");
                 return true;
             }
-            player.sendMessage(String.valueOf(player.getWalkSpeed()));
+            player.setWalkSpeed(0.2f);
 
             return true;
         }
