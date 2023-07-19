@@ -33,14 +33,10 @@ public class Miner extends Profession
         Block block = event.getBlock();
         Material blockType = block.getType();
         double chance = 0;
-        Bukkit.getConsoleSender().sendMessage("1");
         MinerProfessionData minerProfessionData = ProfessionManager.getInstance().getDataBase().getMinerProfessionData(block);
-        Bukkit.getConsoleSender().sendMessage("2");
 
         if (minerProfessionData != null)
         {
-            Bukkit.getConsoleSender().sendMessage("3");
-
             if (getLevel() >= 5)
             {
                 chance = minerProfessionData.chanceLVL5;
@@ -110,7 +106,7 @@ public class Miner extends Profession
     @Override
     public void newLevel()
     {
-        super.newLevel();
+        // TODO quisas quitar, al hacer override no es nesesario hacer un super(), ya se hace solo (Desconosco esto de JAVA)
     }
 
     @Override

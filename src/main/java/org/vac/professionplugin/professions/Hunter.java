@@ -59,7 +59,6 @@ public class Hunter extends Profession
     @Override
     public void newLevel()
     {
-        super.newLevel();
     }
 
     @Override

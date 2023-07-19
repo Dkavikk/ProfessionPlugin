@@ -84,13 +84,13 @@ public class ProfessionDataBase
     public Profession getPlayerProfession(Player player)
     {
         UUID playerUUID = player.getUniqueId();
+        Profession profession = null;
 
         try
         {
             String professionName;
             int level;
             float exp;
-            Profession profession = null;
 
             String query = "SELECT profession_name, profession_level, profession_exp " +
                            "FROM player_professions " +
@@ -107,8 +107,6 @@ public class ProfessionDataBase
                 level = resultSet.getInt("profession_level");
                 exp = resultSet.getInt("profession_exp");
                 profession = Profession.getProfessionByName(professionName, level, exp, player);
-
-                return profession;
             }
 
             resultSet.close();
@@ -117,10 +115,10 @@ public class ProfessionDataBase
         catch (SQLException e)
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get profession: " + e.getMessage());
+            player.sendMessage(ChatColor.RED + "No tienes una profession");
         }
 
-        player.sendMessage(ChatColor.RED + "No tienes una profession");
-        return null;
+        return profession;
     }
 
     public void UpdateProfessionInDB(Player player, Profession profession)
@@ -173,6 +171,7 @@ public class ProfessionDataBase
             {
                 player.sendMessage(ChatColor.RED + "¡No tienes una profesión que dejar!");
             }
+            statement.close();
         }
             catch (SQLException e)
         {
@@ -180,11 +179,13 @@ public class ProfessionDataBase
         }
     }
 
-    public MinerProfessionData getMinerProfessionData(@NotNull Block block)
+    public MinerProfessionData getMinerProfessionData(Block block)
     {
+        MinerProfessionData minerProfessionData = null;
+
         try
         {
-            String query = "SELECT xp, allowed_luminarita_elfica ,allowed_duplicate, material_duplicate, allowed_extra_experience,chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 " +
+            String query = "SELECT xp, allowed_luminarita_elfica, allowed_duplicate, allowed_extra_experience, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 " +
                            "FROM miner_profession " +
                            "WHERE material_name = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -193,7 +194,7 @@ public class ProfessionDataBase
 
             if (resultSet.next())
             {
-                return new MinerProfessionData(
+                minerProfessionData = new MinerProfessionData(
                         block.getType().name(),
                         resultSet.getFloat("xp"),
                         resultSet.getBoolean("allowed_luminarita_elfica"),
@@ -206,23 +207,23 @@ public class ProfessionDataBase
                         resultSet.getDouble("chance_lvl20")
                 );
             }
-            else
-            {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + block.getType().getData().getName());
-            }
 
             resultSet.close();
             statement.close();
         }
         catch (SQLException e)
         {
+            Bukkit.getConsoleSender().sendMessage("asd");
+
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get miner_profession: " + e.getMessage());
         }
-        return null;
+
+        return minerProfessionData;
     }
 
     public HunterProfessionData getHunterProfessionData(@NotNull LivingEntity entity)
     {
+        HunterProfessionData hunterProfessionData = null;
         try
         {
             String query = "SELECT xp, allowed_extra_experience, allowed_cooked, material_original, material_cooked " +
@@ -234,7 +235,7 @@ public class ProfessionDataBase
 
             if (resultSet.next())
             {
-                return new HunterProfessionData(
+                hunterProfessionData = new HunterProfessionData(
                         entity.getType().name(),
                         resultSet.getFloat("xp"),
                         resultSet.getBoolean("allowed_extra_experience"),
@@ -242,10 +243,6 @@ public class ProfessionDataBase
                         resultSet.getString("material_original"),
                         resultSet.getString("material_cooked")
                 );
-            }
-            else
-            {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Entity not found: " + entity.getType().name());
             }
 
             resultSet.close();
@@ -255,6 +252,6 @@ public class ProfessionDataBase
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get hunter_profession: " + e.getMessage());
         }
-        return null;
+        return hunterProfessionData;
     }
 }

@@ -83,7 +83,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
         if (profession != null)
         {
             profession.performProfessionAction(event);
-//            DataBase.UpdateProfessionInDB(player, profession);
         }
     }
 
