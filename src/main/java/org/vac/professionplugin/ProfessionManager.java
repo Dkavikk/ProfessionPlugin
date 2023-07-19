@@ -32,7 +32,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
     private ProfessionDataBase DataBase;
 
     private ProfessionInventoryController inventoryController;
-    private Inventory professioTypeInventory;
 
     @Override
     public void onEnable()
@@ -84,7 +83,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         if (profession != null)
         {
             profession.performProfessionAction(event);
-            DataBase.UpdateProfessionInDB(player, profession);
+//            DataBase.UpdateProfessionInDB(player, profession);
         }
     }
 
@@ -103,7 +102,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
             if (profession != null)
             {
                 profession.performProfessionAction(event);
-                DataBase.UpdateProfessionInDB(player, profession);
+//                DataBase.UpdateProfessionInDB(player, profession);
             }
         }
     }

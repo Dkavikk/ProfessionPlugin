@@ -1,5 +1,6 @@
 package org.vac.professionplugin.professions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,9 +30,11 @@ public class Hunter extends Profession
         LivingEntity entity = event.getEntity();
 
         HunterProfessionData hunterProfessionData = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
+        Bukkit.getConsoleSender().sendMessage("3");
 
         if (hunterProfessionData != null)
         {
+            Bukkit.getConsoleSender().sendMessage("4");
             int amountOfRawMeat = 0;
             Material original = Material.getMaterial(hunterProfessionData.materialOriginal);
             Material cooked = Material.getMaterial(hunterProfessionData.materialCooked);

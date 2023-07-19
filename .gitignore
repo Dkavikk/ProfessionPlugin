@@ -23,3 +23,5 @@
 hs_err_pid*
 
 .idea/discord.xml
+
+target/maven-status/maven-compiler-plugin/compile/default-compile/

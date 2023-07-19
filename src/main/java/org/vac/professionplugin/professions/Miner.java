@@ -33,63 +33,69 @@ public class Miner extends Profession
         Block block = event.getBlock();
         Material blockType = block.getType();
         double chance = 0;
-
+        Bukkit.getConsoleSender().sendMessage("1");
         MinerProfessionData minerProfessionData = ProfessionManager.getInstance().getDataBase().getMinerProfessionData(block);
+        Bukkit.getConsoleSender().sendMessage("2");
 
-        if (getLevel() >= 5)
+        if (minerProfessionData != null)
         {
-            chance = minerProfessionData.chanceLVL5;
-        }
-        else if (getLevel() >= 10)
-        {
-            chance = minerProfessionData.chanceLVL10;
-        }
-        else if (getLevel() >= 15)
-        {
-            chance = minerProfessionData.chanceLVL15;
-        }
-        else if (getLevel() >= 20)
-        {
-            chance = minerProfessionData.chanceLVL20;
-        }
+            Bukkit.getConsoleSender().sendMessage("3");
 
-        if (minerProfessionData.xp > -1)
-        {
-            increaseExperience(minerProfessionData.xp);
-        }
-        else
-        {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
-        }
-
-        if (minerProfessionData.allowedLuminaritaElfica)
-        {
-            Random random = new Random();
-            if (random.nextDouble() <= 0.0001f)
+            if (getLevel() >= 5)
             {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), CreateLuminaritaElfica());
+                chance = minerProfessionData.chanceLVL5;
             }
-        }
-
-        if (minerProfessionData.allowedDuplicate)
-        {
-            Material material = Material.getMaterial(minerProfessionData.materialDuplicate);
-            Random random = new Random();
-            if (material != null)
+            else if (getLevel() >= 10)
             {
-                if (random.nextDouble() <= chance)
+                chance = minerProfessionData.chanceLVL10;
+            }
+            else if (getLevel() >= 15)
+            {
+                chance = minerProfessionData.chanceLVL15;
+            }
+            else if (getLevel() >= 20)
+            {
+                chance = minerProfessionData.chanceLVL20;
+            }
+
+            if (minerProfessionData.xp > -1)
+            {
+                increaseExperience(minerProfessionData.xp);
+            }
+            else
+            {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
+            }
+
+            if (minerProfessionData.allowedLuminaritaElfica)
+            {
+                Random random = new Random();
+                if (random.nextDouble() <= 0.0001f)
                 {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), CreateLuminaritaElfica());
                 }
             }
-        }
 
-        if (minerProfessionData.allowedExtraExperience)
-        {
-            getPlayer().giveExp(calculateExperienceByLVL());
-        }
+            if (minerProfessionData.allowedDuplicate)
+            {
+                Material material = Material.getMaterial(minerProfessionData.materialDuplicate);
+                Random random = new Random();
+                if (material != null)
+                {
+                    if (random.nextDouble() <= chance)
+                    {
+                        event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+                    }
+                }
+            }
 
-        super.performProfessionAction(event);
+            if (minerProfessionData.allowedExtraExperience)
+            {
+                getPlayer().giveExp(calculateExperienceByLVL());
+            }
+
+            super.performProfessionAction(event);
+        }
     }
 
     @Override

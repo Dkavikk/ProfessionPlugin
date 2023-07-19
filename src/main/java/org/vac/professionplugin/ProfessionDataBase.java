@@ -55,6 +55,32 @@ public class ProfessionDataBase
         }
     }
 
+    public void setProfessionDB(Player player, String professionName){
+
+        try
+        {
+            // Guardar la profesión en la base de datos
+            String query = "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) " +
+                           "VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, professionName);
+            statement.setInt(3, 1);
+            statement.setFloat(4, 1);
+
+            statement.executeUpdate();
+            statement.close();
+
+            player.sendMessage(ChatColor.GREEN + "Profesión establecida con éxito para el jugador " + player.getName() +
+                    ": " + professionName);
+        }
+        catch (SQLException e)
+        {
+            player.sendMessage(ChatColor.RED + "Fallo al establecer profesion: " + e.getMessage());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to set profession: " + e.getMessage());
+        }
+    }
+
     public Profession getPlayerProfession(Player player)
     {
         UUID playerUUID = player.getUniqueId();

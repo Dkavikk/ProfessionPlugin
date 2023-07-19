@@ -40,53 +40,33 @@ public class ProfessionInventoryController implements Listener
             Player targetPlayer = (Player) event.getWhoClicked();
             String professionName = "";
 
-            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + " "))
+            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + " "))
             {
                 return;
             }
 
-            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Minero"))
+            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Minero"))
             {
                 professionName = "Minero";
             }
-            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Leñador"))
+            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Leñador"))
             {
                 professionName = "Leñador";
             }
-            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Granjero"))
+            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Granjero"))
             {
                 professionName = "Granjero";
             }
-            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Cazador"))
+            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Cazador"))
             {
                 professionName = "Cazador";
             }
-            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + "Constructor"))
+            else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Constructor"))
             {
                 professionName = "Constructor";
             }
 
-            try
-            {
-                // Guardar la profesión en la base de datos
-                PreparedStatement statement = ProfessionManager.getConnection().prepareStatement(
-                        "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) VALUES (?, ?, ?, ?)"
-                );
-                statement.setString(1, targetPlayer.getUniqueId().toString());
-                statement.setString(2, professionName);
-                statement.setInt(3, 1);
-                statement.setFloat(4, 1);
-
-                statement.executeUpdate();
-                statement.close();
-
-                targetPlayer.sendMessage(ChatColor.GREEN + "Profesión establecida con éxito para el jugador " + targetPlayer.getName() +
-                        ": " + professionName);
-            }
-            catch (SQLException e)
-            {
-                targetPlayer.sendMessage(ChatColor.RED + "Failed to set profession: " + e.getMessage());
-            }
+            ProfessionManager.getInstance().getDataBase().setProfessionDB(targetPlayer, professionName);
 
             targetPlayer.closeInventory();
 
