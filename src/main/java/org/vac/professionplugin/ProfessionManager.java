@@ -2,14 +2,10 @@ package org.vac.professionplugin;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.vac.professionplugin.commands.*;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
 import org.vac.professionplugin.professions.Profession;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,13 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
-import javax.xml.crypto.Data;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class ProfessionManager extends JavaPlugin implements Listener
 {
@@ -55,7 +45,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
     @Override
     public void onDisable()
     {
-
+        DataBase.disconnectFromDatabase();
     }
 
 
@@ -65,11 +55,12 @@ public class ProfessionManager extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent event)
+    {
         if (event.getInventory() == inventoryController.getSetProfessioInventory())
         {
             event.setCancelled(true);
-            inventoryController.OnSetProfessioInventory(event);
+            inventoryController.OnSetProfessionInventory(event);
         }
     }
     @EventHandler

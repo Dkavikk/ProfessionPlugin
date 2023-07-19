@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.vac.professionplugin.MinerProfessionData;
+import org.vac.professionplugin.BlockDataProfession;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.ArrayList;
@@ -31,67 +31,64 @@ public class Miner extends Profession
     public void performProfessionAction(BlockBreakEvent event)
     {
         Block block = event.getBlock();
-        Material blockType = block.getType();
-        double chance = 0;
-        MinerProfessionData minerProfessionData = ProfessionManager.getInstance().getDataBase().getMinerProfessionData(block);
+        BlockDataProfession blockDataProfession = ProfessionManager.getInstance().getDataBase().getBlockDataForBlockName(block.getType().name());
 
-        if (minerProfessionData != null)
+        if (blockDataProfession != null)
         {
-            if (getLevel() >= 5)
+            if (belongToProfession(blockDataProfession))
             {
-                chance = minerProfessionData.chanceLVL5;
-            }
-            else if (getLevel() >= 10)
-            {
-                chance = minerProfessionData.chanceLVL10;
-            }
-            else if (getLevel() >= 15)
-            {
-                chance = minerProfessionData.chanceLVL15;
-            }
-            else if (getLevel() >= 20)
-            {
-                chance = minerProfessionData.chanceLVL20;
-            }
+                increaseExperience(blockDataProfession.xpBreak);
+                // TODO Cambiar metodo para identificar cada recompensa rara de profession
+                //            if (blockDataProfession.allowedLuminaritaElfica)
+                //            {
+                //                Random random = new Random();
+                //                if (random.nextDouble() <= 0.0001f)
+                //                {
+                //                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), CreateLuminaritaElfica());
+                //                }
+                //            }
 
-            if (minerProfessionData.xp > -1)
-            {
-                increaseExperience(minerProfessionData.xp);
-            }
-            else
-            {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
-            }
-
-            if (minerProfessionData.allowedLuminaritaElfica)
-            {
-                Random random = new Random();
-                if (random.nextDouble() <= 0.0001f)
+                if (blockDataProfession.allowedDuplicate)
                 {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), CreateLuminaritaElfica());
-                }
-            }
-
-            if (minerProfessionData.allowedDuplicate)
-            {
-                Material material = Material.getMaterial(minerProfessionData.materialDuplicate);
-                Random random = new Random();
-                if (material != null)
-                {
-                    if (random.nextDouble() <= chance)
+                    Material material = Material.getMaterial(blockDataProfession.materialDuplicate);
+                    Random random = new Random();
+                    if (material != null)
                     {
-                        event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+                        if (random.nextDouble() <= getChance(blockDataProfession))
+                        {
+                            event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+                        }
                     }
                 }
-            }
 
-            if (minerProfessionData.allowedExtraExperience)
-            {
-                getPlayer().giveExp(calculateExperienceByLVL());
+                if (blockDataProfession.allowedExtraExperience)
+                {
+                    getPlayer().giveExp(calculateExperienceByLVL());
+                }
             }
-
-            super.performProfessionAction(event);
         }
+    }
+
+    private double getChance(BlockDataProfession blockDataProfession)
+    {
+        if (getLevel() >= 20)
+        {
+            return blockDataProfession.chanceLVL20;
+        }
+        else if (getLevel() >= 15)
+        {
+            return blockDataProfession.chanceLVL15;
+        }
+        else if (getLevel() >= 10)
+        {
+            return blockDataProfession.chanceLVL10;
+        }
+        else if (getLevel() >= 5)
+        {
+            return blockDataProfession.chanceLVL5;
+        }
+
+        return 0;
     }
 
     @Override

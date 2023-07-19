@@ -1,6 +1,5 @@
 org\vac\professionplugin\professions\Miner.class
 org\vac\professionplugin\commands\SetProfessionCommand.class
-org\vac\professionplugin\MinerProfessionData.class
 org\vac\professionplugin\commands\ProfessionCommands.class
 org\vac\professionplugin\professions\Hunter.class
 org\vac\professionplugin\commands\GetProfessionCommand.class
@@ -8,6 +7,7 @@ org\vac\professionplugin\inventory\LoreItemInventory.class
 org\vac\professionplugin\professions\Farmer.class
 org\vac\professionplugin\commands\SetProfessionCommandTabCompletation.class
 org\vac\professionplugin\commands\LeavingProfessionCommand.class
+org\vac\professionplugin\BlockDataProfession.class
 org\vac\professionplugin\ProfessionDataBase.class
 org\vac\professionplugin\commands\CommandsTest.class
 org\vac\professionplugin\inventory\ProfessionInventoryController.class

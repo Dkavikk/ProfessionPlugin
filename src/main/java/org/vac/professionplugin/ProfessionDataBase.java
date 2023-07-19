@@ -55,13 +55,14 @@ public class ProfessionDataBase
         }
     }
 
-    public void setProfessionDB(Player player, String professionName){
+    public void setProfessionDB(Player player, String professionName)
+    {
 
         try
         {
             // Guardar la profesión en la base de datos
             String query = "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) " +
-                           "VALUES (?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, player.getUniqueId().toString());
             statement.setString(2, professionName);
@@ -93,8 +94,8 @@ public class ProfessionDataBase
             float exp;
 
             String query = "SELECT profession_name, profession_level, profession_exp " +
-                           "FROM player_professions " +
-                           "WHERE player_uuid = ?";
+                    "FROM player_professions " +
+                    "WHERE player_uuid = ?";
 
             // Obtener la profesión del jugador desde la base de datos
             PreparedStatement statement = connection.prepareStatement(query);
@@ -125,9 +126,9 @@ public class ProfessionDataBase
     {
         try
         {
-            String query ="UPDATE player_professions " +
-                          "SET profession_level = ?, profession_exp = ? " +
-                          "WHERE player_uuid = ? AND profession_name = ?";
+            String query = "UPDATE player_professions " +
+                    "SET profession_level = ?, profession_exp = ? " +
+                    "WHERE player_uuid = ? AND profession_name = ?";
             // Actualiza el nivel de la profesión en la base de datos
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, profession.getLevel());
@@ -173,30 +174,49 @@ public class ProfessionDataBase
             }
             statement.close();
         }
-            catch (SQLException e)
+        catch (SQLException e)
         {
             player.sendMessage(ChatColor.RED + "Failed to leave profession: " + e.getMessage());
         }
     }
 
-    public MinerProfessionData getMinerProfessionData(Block block)
+
+    public BlockDataProfession getBlockDataForBlockName(String blockName)
     {
-        MinerProfessionData minerProfessionData = null;
+        BlockDataProfession blockDataProfession = null;
 
         try
         {
-            String query = "SELECT xp, allowed_luminarita_elfica, allowed_duplicate, allowed_extra_experience, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 " +
-                           "FROM miner_profession " +
-                           "WHERE material_name = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, block.getType().name());
+            String query = "SELECT " +
+                    "MINER_PROFESSION, " +
+                    "HUNTER_PROFESSION, " +
+                    "C, " +
+                    "D, " +
+                    "E, " +
+                    "XP_BREAK, " +
+                    "XP_PLACE, " +
+                    "ALLOWED_LUMINARITA_ELFICA, " +
+                    "ALLOWED_DUPLICATE, " +
+                    "ALLOWED_EXTRA_EXPERIENCE, " +
+                    "MATERIAL_DUPLICATE, " +
+                    "CHANCE_LVL5, CHANCE_LVL10, CHANCE_LVL15, CHANCE_LVL20 " +
+                    "FROM block_data_profession " +
+                    "WHERE material_name = ?";
+            PreparedStatement statement = ProfessionManager.getInstance().getDataBase().getConnection().prepareStatement(query);
+            statement.setString(1, blockName);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next())
             {
-                minerProfessionData = new MinerProfessionData(
-                        block.getType().name(),
-                        resultSet.getFloat("xp"),
+                blockDataProfession = new BlockDataProfession(
+                        blockName,
+                        resultSet.getBoolean("miner_profession"),
+                        resultSet.getBoolean("hunter_profession"),
+                        resultSet.getBoolean("c"),
+                        resultSet.getBoolean("d"),
+                        resultSet.getBoolean("e"),
+                        resultSet.getFloat("xp_break"),
+                        resultSet.getFloat("xp_place"),
                         resultSet.getBoolean("allowed_luminarita_elfica"),
                         resultSet.getBoolean("allowed_duplicate"),
                         resultSet.getBoolean("allowed_extra_experience"),
@@ -213,12 +233,10 @@ public class ProfessionDataBase
         }
         catch (SQLException e)
         {
-            Bukkit.getConsoleSender().sendMessage("asd");
-
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get miner_profession: " + e.getMessage());
         }
 
-        return minerProfessionData;
+        return blockDataProfession;
     }
 
     public HunterProfessionData getHunterProfessionData(@NotNull LivingEntity entity)
@@ -253,5 +271,13 @@ public class ProfessionDataBase
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get hunter_profession: " + e.getMessage());
         }
         return hunterProfessionData;
+    }
+
+
+
+
+    public Connection getConnection()
+    {
+        return connection;
     }
 }

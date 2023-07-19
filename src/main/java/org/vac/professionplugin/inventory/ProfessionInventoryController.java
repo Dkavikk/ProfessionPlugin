@@ -1,21 +1,16 @@
 package org.vac.professionplugin.inventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.vac.professionplugin.ProfessionManager;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,12 +23,12 @@ public class ProfessionInventoryController implements Listener
         return setProfessioInventory;
     }
 
-    public void openSetProfessioInventory(Player player)
+    public void openSetProfessionInventory(Player player)
     {
         player.openInventory(setProfessioInventory);
     }
 
-    public void OnSetProfessioInventory(InventoryClickEvent event)
+    public void OnSetProfessionInventory(InventoryClickEvent event)
     {
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
         {
@@ -66,9 +61,13 @@ public class ProfessionInventoryController implements Listener
                 professionName = "Constructor";
             }
 
-            ProfessionManager.getInstance().getDataBase().setProfessionDB(targetPlayer, professionName);
+            if (!professionName.equals(""))
+            {
+                ProfessionManager.getInstance().getDataBase().setProfessionDB(targetPlayer, professionName);
 
-            targetPlayer.closeInventory();
+                targetPlayer.closeInventory();
+            }
+
 
         }
     }
@@ -77,7 +76,7 @@ public class ProfessionInventoryController implements Listener
     {
         setProfessioInventory = ProfessionManager.getInstance().getServer().createInventory(null, 9, ChatColor.BOLD + "Profesiones");
 
-        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, "", "");
+        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, " ", " ");
 
         ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, "Minero", LoreItemInventory.LORE_MINER_PROFESSION);
         ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador", "");

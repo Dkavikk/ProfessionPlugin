@@ -6,14 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.vac.professionplugin.MinerProfessionData;
 import org.vac.professionplugin.ProfessionManager;
 import org.vac.professionplugin.professions.Profession;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class GetProfessionCommand implements CommandExecutor
 {

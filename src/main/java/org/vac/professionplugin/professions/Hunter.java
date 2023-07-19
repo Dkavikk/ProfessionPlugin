@@ -30,11 +30,9 @@ public class Hunter extends Profession
         LivingEntity entity = event.getEntity();
 
         HunterProfessionData hunterProfessionData = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
-        Bukkit.getConsoleSender().sendMessage("3");
 
         if (hunterProfessionData != null)
         {
-            Bukkit.getConsoleSender().sendMessage("4");
             int amountOfRawMeat = 0;
             Material original = Material.getMaterial(hunterProfessionData.materialOriginal);
             Material cooked = Material.getMaterial(hunterProfessionData.materialCooked);
@@ -47,12 +45,10 @@ public class Hunter extends Profession
                     amountOfRawMeat += drop.getAmount();
                 }
             }
-
+            //TODO SOlo cocinar la carne despues de lvl 5
             event.getDrops().removeIf(item -> item.getType() == original);
             ItemStack cookedMeat = new ItemStack(Objects.requireNonNull(cooked), amountOfRawMeat);
             event.getDrops().add(cookedMeat);
-
-            super.performProfessionAction(event);
         }
     }
 
