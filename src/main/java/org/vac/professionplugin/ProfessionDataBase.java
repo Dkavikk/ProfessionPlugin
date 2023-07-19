@@ -127,6 +127,33 @@ public class ProfessionDataBase
         }
     }
 
+    public void LeavingProfessionPlayer(Player player)
+    {
+        try
+        {
+            // Eliminar la información de la profesión del jugador en la base de datos
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM player_professions WHERE player_uuid = ?"
+            );
+            statement.setString(1, player.getUniqueId().toString());
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+
+            if (rowsAffected > 0)
+            {
+                player.sendMessage(ChatColor.GREEN + "¡Has dejado tu profesión!");
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + "¡No tienes una profesión que dejar!");
+            }
+        }
+            catch (SQLException e)
+        {
+            player.sendMessage(ChatColor.RED + "Failed to leave profession: " + e.getMessage());
+        }
+    }
+
     public MinerProfessionData getMinerProfessionData(@NotNull Block block)
     {
         try
