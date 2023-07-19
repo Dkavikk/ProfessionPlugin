@@ -1,5 +1,6 @@
 package org.vac.professionplugin.professions;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -97,7 +98,33 @@ public abstract class Profession {
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
-    public abstract void newLevel();
+    public void newLevel()
+    {
+        // TODO Add money economy system
+
+        player.sendMessage(ChatColor.GREEN + "Has subido de nivel ");
+        player.sendMessage(ChatColor.GREEN + "Ahora eres nivel: " + level);
+
+        if (getLevel() == 5)
+        {
+            Level5Reward();
+        }
+
+        if (getLevel() == 10)
+        {
+            Level10Reward();
+        }
+
+        if (getLevel() == 15)
+        {
+            Level15Reward();
+        }
+
+        if (getLevel() == 20)
+        {
+            Level20Reward();
+        }
+    }
     public abstract void Level5Reward();
     public abstract void Level10Reward();
     public abstract void Level15Reward();

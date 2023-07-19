@@ -3,11 +3,8 @@ package org.vac.professionplugin.professions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -17,10 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.vac.professionplugin.MinerProfessionData;
 import org.vac.professionplugin.ProfessionManager;
 
-import java.nio.DoubleBuffer;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -111,27 +104,7 @@ public class Miner extends Profession
     @Override
     public void newLevel()
     {
-        // TODO Add money economy system
-
-        if (getLevel() == 5)
-        {
-            Level5Reward();
-        }
-
-        if (getLevel() == 10)
-        {
-            Level10Reward();
-        }
-
-        if (getLevel() == 15)
-        {
-            Level15Reward();
-        }
-
-        if (getLevel() == 20)
-        {
-            Level20Reward();
-        }
+        super.newLevel();
     }
 
     @Override
@@ -187,7 +160,7 @@ public class Miner extends Profession
 
         String description =
                 "Mineral extremadamente raro y poderoso" +
-                "se deconose su uso, pero se siente supoder";
+                "se deconose su uso, pero se siente su poder";
         List<String> lore = new ArrayList<>();
         lore.add(description);
 
