@@ -55,6 +55,7 @@ public class Hunter extends Profession
                     event.getDrops().add(cookedMeat);
                 }
 
+                increaseExperience(entityDataProfession.xpKill);
             }
         }
     }
