@@ -239,7 +239,7 @@ public class ProfessionDataBase
         return blockDataProfession;
     }
 
-    public EntityDataProfession getHunterProfessionData(@NotNull LivingEntity entity)
+    public EntityDataProfession getEntityDataProfession(@NotNull LivingEntity entity)
     {
         EntityDataProfession entityDataProfession = null;
         try

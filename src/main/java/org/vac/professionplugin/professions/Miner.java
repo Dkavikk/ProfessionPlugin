@@ -3,7 +3,6 @@ package org.vac.professionplugin.professions;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -63,6 +62,8 @@ public class Miner extends Profession
                 {
                     getPlayer().giveExp(calculateExperienceByLVL());
                 }
+
+                super.performProfessionAction(event);
             }
         }
     }
@@ -93,9 +94,17 @@ public class Miner extends Profession
     public void performProfessionAction(EntityDeathEvent event)
     {
         LivingEntity entity = event.getEntity();
-        EntityType entityType = entity.getType();
 
-        if (entityType == EntityType.BAT) { increaseExperience(0.5f); }
+        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(entity);
+
+        if (entityDataProfession != null)
+        {
+            if (belongToProfession(entityDataProfession))
+            {
+                increaseExperience(entityDataProfession.xpKill);
+                super.performProfessionAction(event);
+            }
+        }
     }
 
     @Override

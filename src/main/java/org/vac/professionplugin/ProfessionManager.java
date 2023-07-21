@@ -1,5 +1,8 @@
 package org.vac.professionplugin;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.vac.professionplugin.commands.*;
@@ -67,7 +70,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
     public void onBlockBreak(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
-        player.sendMessage("Has picado un bloque!");
 
         Profession profession = DataBase.getPlayerProfession(player);
 
@@ -75,6 +77,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         {
             profession.performProfessionAction(event);
         }
+        player.sendMessage("Has picado un bloque!");
     }
 
     @EventHandler
@@ -85,15 +88,21 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
         if (player != null)
         {
-            player.sendMessage("Has matado un mob!");
-
             Profession profession = DataBase.getPlayerProfession(player);
 
             if (profession != null)
             {
                 profession.performProfessionAction(event);
-//                DataBase.UpdateProfessionInDB(player, profession);
             }
+            player.sendMessage("Has matado un mob!");
+        }
+    }
+
+    @EventHandler
+    public void onEntityBreed(EntityBreedEvent event)
+    {
+        if (event.getMother().getType() == event.getFather().getType())
+        {
         }
     }
 

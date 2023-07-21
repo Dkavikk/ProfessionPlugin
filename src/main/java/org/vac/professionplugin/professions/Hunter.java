@@ -1,13 +1,11 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.vac.professionplugin.HunterProfessionData;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.Objects;
@@ -20,16 +18,9 @@ public class Hunter extends Profession
     }
 
     @Override
-    public void performProfessionAction(BlockBreakEvent event)
-    {
-    }
-
-    @Override
     public void performProfessionAction(EntityDeathEvent event)
     {
-        LivingEntity entity = event.getEntity();
-
-        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
+        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(event.getEntity());
 
         if (entityDataProfession != null)
         {
@@ -56,6 +47,26 @@ public class Hunter extends Profession
                 }
 
                 increaseExperience(entityDataProfession.xpKill);
+                super.performProfessionAction(event);
+            }
+        }
+    }
+
+    @Override
+    public void performProfessionAction(EntityBreedEvent event)
+    {
+        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(event.getEntity());
+
+        if (entityDataProfession != null)
+        {
+            if (belongToProfession(entityDataProfession))
+            {
+                if (event.getEntity().getType() == EntityType.WOLF)
+                {
+                    // TODO Probabilidad de que salgo gemelos
+                    increaseExperience(entityDataProfession.xpKill);
+                    super.performProfessionAction(event);
+                }
             }
         }
     }

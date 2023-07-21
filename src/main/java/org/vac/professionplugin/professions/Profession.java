@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.vac.professionplugin.ProfessionManager;
 
@@ -62,7 +63,6 @@ public abstract class Profession {
     {
         this.exp += experienceGained;
 
-        player.sendMessage("has resivido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
         // Incremento de experiencia requerida por nivel
         int experienceNextLevel = requiredExperience(this.level);
         if (this.exp >= experienceNextLevel)
@@ -72,6 +72,7 @@ public abstract class Profession {
             this.levelUp = true;
             newLevel();
         }
+        player.sendMessage("has resivido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
     }
 
     public static Profession getProfessionByName(String name, int level, float exp ,Player player)
@@ -92,10 +93,13 @@ public abstract class Profession {
 
     public void performProfessionAction(BlockBreakEvent event)
     {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_BLUE + "performProfessionAction Sin Super");
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
     public void performProfessionAction(EntityDeathEvent event)
+    {
+        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
+    }
+    public void performProfessionAction(EntityBreedEvent event)
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
