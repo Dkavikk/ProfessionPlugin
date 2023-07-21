@@ -1,4 +1,4 @@
-package org.vac.professionplugin;
+package org.vac.professionplugin.professions;
 
 public class BlockDataProfession
 {

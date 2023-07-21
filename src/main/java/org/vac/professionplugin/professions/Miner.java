@@ -1,6 +1,5 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,7 +10,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.vac.professionplugin.BlockDataProfession;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.ArrayList;

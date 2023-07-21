@@ -2,11 +2,11 @@ package org.vac.professionplugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.vac.professionplugin.professions.BlockDataProfession;
+import org.vac.professionplugin.professions.EntityDataProfession;
 import org.vac.professionplugin.professions.Profession;
 
 import java.sql.*;
@@ -239,23 +239,41 @@ public class ProfessionDataBase
         return blockDataProfession;
     }
 
-    public HunterProfessionData getHunterProfessionData(@NotNull LivingEntity entity)
+    public EntityDataProfession getHunterProfessionData(@NotNull LivingEntity entity)
     {
-        HunterProfessionData hunterProfessionData = null;
+        EntityDataProfession entityDataProfession = null;
         try
         {
-            String query = "SELECT xp, allowed_extra_experience, allowed_cooked, material_original, material_cooked " +
-                           "FROM hunter_profession " +
-                           "WHERE entity_name = ?";
+            String query = "SELECT " +
+                    "ENTITY_NAME, " +
+                    "MINER_PROFESSION, " +
+                    "HUNTER_PROFESSION, " +
+                    "C, " +
+                    "D, " +
+                    "E, " +
+                    "xp_kill, " +
+                    "XP_BREED, " +
+                    "ALLOWED_EXTRA_EXPERIENCE, " +
+                    "ALLOWED_COOKED, " +
+                    "MATERIAL_ORIGINAL, " +
+                    "MATERIAL_COOKED " +
+                    "FROM entity_data_profession " +
+                    "WHERE entity_name = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, entity.getType().name());
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next())
             {
-                hunterProfessionData = new HunterProfessionData(
+                entityDataProfession = new EntityDataProfession(
                         entity.getType().name(),
-                        resultSet.getFloat("xp"),
+                        resultSet.getBoolean("miner_profession"),
+                        resultSet.getBoolean("hunter_profession"),
+                        resultSet.getBoolean("c"),
+                        resultSet.getBoolean("d"),
+                        resultSet.getBoolean("e"),
+                        resultSet.getFloat("xp_kill"),
+                        resultSet.getFloat("xp_breed"),
                         resultSet.getBoolean("allowed_extra_experience"),
                         resultSet.getBoolean("allowed_cooked"),
                         resultSet.getString("material_original"),
@@ -270,7 +288,8 @@ public class ProfessionDataBase
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get hunter_profession: " + e.getMessage());
         }
-        return hunterProfessionData;
+
+        return entityDataProfession;
     }
 
 

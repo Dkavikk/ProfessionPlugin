@@ -29,26 +29,33 @@ public class Hunter extends Profession
     {
         LivingEntity entity = event.getEntity();
 
-        HunterProfessionData hunterProfessionData = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
+        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
 
-        if (hunterProfessionData != null)
+        if (entityDataProfession != null)
         {
-            int amountOfRawMeat = 0;
-            Material original = Material.getMaterial(hunterProfessionData.materialOriginal);
-            Material cooked = Material.getMaterial(hunterProfessionData.materialCooked);
-
-
-            for (ItemStack drop : event.getDrops())
+            if (belongToProfession(entityDataProfession))
             {
-                if (drop.getType() == original)
+                Material original = Material.getMaterial(entityDataProfession.materialOriginal);
+                Material cooked = Material.getMaterial(entityDataProfession.materialCooked);
+
+                // Cocina la carne despues de lvl 5 de profesion
+                if (entityDataProfession.allowedCooked && getLevel() >= 5)
                 {
-                    amountOfRawMeat += drop.getAmount();
+                    int amountOfRawMeat = 0;
+                    for (ItemStack drop : event.getDrops())
+                    {
+                        if (drop.getType() == original)
+                        {
+                            amountOfRawMeat += drop.getAmount();
+                        }
+                    }
+
+                    event.getDrops().removeIf(item -> item.getType() == original);
+                    ItemStack cookedMeat = new ItemStack(Objects.requireNonNull(cooked), amountOfRawMeat);
+                    event.getDrops().add(cookedMeat);
                 }
+
             }
-            //TODO SOlo cocinar la carne despues de lvl 5
-            event.getDrops().removeIf(item -> item.getType() == original);
-            ItemStack cookedMeat = new ItemStack(Objects.requireNonNull(cooked), amountOfRawMeat);
-            event.getDrops().add(cookedMeat);
         }
     }
 
