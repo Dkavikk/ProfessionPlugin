@@ -103,6 +103,18 @@ public class ProfessionManager extends JavaPlugin implements Listener
     {
         if (event.getMother().getType() == event.getFather().getType())
         {
+            if (event.getBreeder() instanceof Player)
+            {
+                Player player = (Player) event.getBreeder();
+                Profession profession = DataBase.getPlayerProfession(player);
+
+                if (profession != null)
+                {
+                    profession.performProfessionAction(event);
+                }
+            }
+
+
         }
     }
 
