@@ -3,6 +3,7 @@ package org.vac.professionplugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.vac.professionplugin.commands.*;
@@ -94,7 +95,23 @@ public class ProfessionManager extends JavaPlugin implements Listener
             {
                 profession.performProfessionAction(event);
             }
-            player.sendMessage("Has matado un mob!");
+            player.sendMessage("Has matado un entidad!");
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event)
+    {
+        // Verifica si el daño es causado por un jugador
+        if (event.getDamager() instanceof Player)
+        {
+            Profession profession = DataBase.getPlayerProfession((Player) event.getDamager());
+
+            if (profession != null)
+            {
+                profession.performProfessionAction(event);
+            }
+            event.getDamager().sendMessage("Has atacado a un entidad!");
         }
     }
 
@@ -112,12 +129,10 @@ public class ProfessionManager extends JavaPlugin implements Listener
                 {
                     profession.performProfessionAction(event);
                 }
+                player.sendMessage("Has has apareado a una entidad!");
             }
-
-
         }
     }
-
 
     public ProfessionDataBase getDataBase()
     {
