@@ -6,7 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.vac.professionplugin.ProfessionManager;
@@ -63,31 +66,9 @@ public class Miner extends Profession
                     getPlayer().giveExp(calculateExperienceByLVL());
                 }
 
-                super.onBlockBreak(event);
+                ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
             }
         }
-    }
-
-    private double getChance(BlockDataProfession blockDataProfession)
-    {
-        if (getLevel() >= 20)
-        {
-            return blockDataProfession.chanceLVL20;
-        }
-        else if (getLevel() >= 15)
-        {
-            return blockDataProfession.chanceLVL15;
-        }
-        else if (getLevel() >= 10)
-        {
-            return blockDataProfession.chanceLVL10;
-        }
-        else if (getLevel() >= 5)
-        {
-            return blockDataProfession.chanceLVL5;
-        }
-
-        return 0;
     }
 
     @Override
@@ -102,10 +83,22 @@ public class Miner extends Profession
             if (belongToProfession(entityDataProfession))
             {
                 increaseExperience(entityDataProfession.xpKill);
-                super.onEntityDeath(event);
+                ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
             }
         }
     }
+
+    @Override
+    public void onEntityDamage(EntityDamageByEntityEvent event)
+    {}
+
+    @Override
+    public void onPlayerShootBow(EntityShootBowEvent event)
+    {}
+
+    @Override
+    public void onEntityBreed(EntityBreedEvent event)
+    {}
 
     @Override
     public void newLevel()
@@ -154,6 +147,28 @@ public class Miner extends Profession
         else if (getLevel() >= 20)
         {
             return 10;
+        }
+
+        return 0;
+    }
+
+    private double getChance(BlockDataProfession blockDataProfession)
+    {
+        if (getLevel() >= 20)
+        {
+            return blockDataProfession.chanceLVL20;
+        }
+        else if (getLevel() >= 15)
+        {
+            return blockDataProfession.chanceLVL15;
+        }
+        else if (getLevel() >= 10)
+        {
+            return blockDataProfession.chanceLVL10;
+        }
+        else if (getLevel() >= 5)
+        {
+            return blockDataProfession.chanceLVL5;
         }
 
         return 0;

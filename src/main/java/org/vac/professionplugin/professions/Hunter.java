@@ -5,9 +5,11 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.vac.professionplugin.ProfessionManager;
 
 public class Hunter extends Profession
@@ -16,6 +18,10 @@ public class Hunter extends Profession
     {
         super("Cazador", level, exp, player);
     }
+
+    @Override
+    public void onBlockBreak(BlockBreakEvent event)
+    {}
 
     @Override
     public void onEntityDeath(EntityDeathEvent event)
@@ -47,7 +53,7 @@ public class Hunter extends Profession
 //                }
 
                 increaseExperience(entityDataProfession.xpKill);
-                super.onEntityDeath(event);
+                ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
             }
         }
     }
@@ -56,6 +62,15 @@ public class Hunter extends Profession
     public void onEntityDamage(EntityDamageByEntityEvent event)
     {
         event.setDamage(event.getDamage() + getExtraDamageForLVL());
+    }
+
+    @Override
+    public void onPlayerShootBow(EntityShootBowEvent event)
+    {
+        if (getLevel() >= 10)
+        {
+            event.getProjectile().setVelocity(event.getProjectile().getVelocity().multiply(1.5));
+        }
     }
 
     @Override
@@ -71,7 +86,7 @@ public class Hunter extends Profession
                 {
                     // TODO Probabilidad de que salgo gemelos
                     increaseExperience(entityDataProfession.xpKill);
-                    super.onEntityBreed(event);
+                    ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
                 }
             }
         }

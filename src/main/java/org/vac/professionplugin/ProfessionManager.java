@@ -2,6 +2,7 @@ package org.vac.professionplugin;
 
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.vac.professionplugin.commands.*;
@@ -103,13 +104,29 @@ public class ProfessionManager extends JavaPlugin implements Listener
         // Verifica si el daño es causado por un jugador
         if (event.getDamager() instanceof Player)
         {
-            Profession profession = DataBase.getPlayerProfession((Player) event.getDamager());
+            Player player = (Player) event.getEntity();
+            Profession profession = DataBase.getPlayerProfession(player);
 
             if (profession != null)
             {
                 profession.onEntityDamage(event);
             }
             event.getDamager().sendMessage("Has atacado a un entidad!");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerShootBow(EntityShootBowEvent event)
+    {
+        if (event.getEntity() instanceof Player)
+        {
+            Player player = (Player) event.getEntity();
+
+            Profession profession = DataBase.getPlayerProfession(player);
+            if (profession != null)
+            {
+                profession.onPlayerShootBow(event);
+            }
         }
     }
 

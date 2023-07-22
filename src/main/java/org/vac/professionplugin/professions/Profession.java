@@ -6,6 +6,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.Objects;
@@ -91,22 +92,14 @@ public abstract class Profession {
         }
     }
 
-    public void onBlockBreak(BlockBreakEvent event)
-    {
-        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
-    }
-    public void onEntityDeath(EntityDeathEvent event)
-    {
-        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
-    }
-    public void onEntityDamage(EntityDamageByEntityEvent event)
-    {
-        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
-    }
-    public void onEntityBreed(EntityBreedEvent event)
-    {
-        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
-    }
+    public abstract void onBlockBreak(BlockBreakEvent event);
+    public abstract void onEntityDeath(EntityDeathEvent event);
+    public abstract void onEntityDamage(EntityDamageByEntityEvent event);
+    public abstract void onPlayerShootBow(EntityShootBowEvent event);
+    public abstract void onEntityBreed(EntityBreedEvent event);
+//    {
+//        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
+//    }
 
     public void newLevel()
     {
