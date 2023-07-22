@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 import org.vac.professionplugin.ProfessionManager;
-
-import java.util.Objects;
 
 public class Hunter extends Profession
 {
@@ -21,7 +18,7 @@ public class Hunter extends Profession
     }
 
     @Override
-    public void performProfessionAction(EntityDeathEvent event)
+    public void onEntityDeath(EntityDeathEvent event)
     {
         EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(event.getEntity());
 
@@ -50,19 +47,19 @@ public class Hunter extends Profession
 //                }
 
                 increaseExperience(entityDataProfession.xpKill);
-                super.performProfessionAction(event);
+                super.onEntityDeath(event);
             }
         }
     }
 
     @Override
-    public void performProfessionAction(EntityDamageByEntityEvent event)
+    public void onEntityDamage(EntityDamageByEntityEvent event)
     {
         event.setDamage(event.getDamage() + getExtraDamageForLVL());
     }
 
     @Override
-    public void performProfessionAction(EntityBreedEvent event)
+    public void onEntityBreed(EntityBreedEvent event)
     {
         EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(event.getEntity());
 
@@ -74,7 +71,7 @@ public class Hunter extends Profession
                 {
                     // TODO Probabilidad de que salgo gemelos
                     increaseExperience(entityDataProfession.xpKill);
-                    super.performProfessionAction(event);
+                    super.onEntityBreed(event);
                 }
             }
         }

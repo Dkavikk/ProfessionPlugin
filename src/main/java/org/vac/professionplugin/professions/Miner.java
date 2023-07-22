@@ -25,7 +25,7 @@ public class Miner extends Profession
 
 
     @Override
-    public void performProfessionAction(BlockBreakEvent event)
+    public void onBlockBreak(BlockBreakEvent event)
     {
         Block block = event.getBlock();
         BlockDataProfession blockDataProfession = ProfessionManager.getInstance().getDataBase().getBlockDataForBlockName(block.getType().name());
@@ -63,7 +63,7 @@ public class Miner extends Profession
                     getPlayer().giveExp(calculateExperienceByLVL());
                 }
 
-                super.performProfessionAction(event);
+                super.onBlockBreak(event);
             }
         }
     }
@@ -91,7 +91,7 @@ public class Miner extends Profession
     }
 
     @Override
-    public void performProfessionAction(EntityDeathEvent event)
+    public void onEntityDeath(EntityDeathEvent event)
     {
         LivingEntity entity = event.getEntity();
 
@@ -102,7 +102,7 @@ public class Miner extends Profession
             if (belongToProfession(entityDataProfession))
             {
                 increaseExperience(entityDataProfession.xpKill);
-                super.performProfessionAction(event);
+                super.onEntityDeath(event);
             }
         }
     }

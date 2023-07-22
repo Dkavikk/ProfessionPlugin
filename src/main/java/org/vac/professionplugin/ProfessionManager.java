@@ -1,7 +1,5 @@
 package org.vac.professionplugin;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -76,7 +74,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
         if (profession != null)
         {
-            profession.performProfessionAction(event);
+            profession.onBlockBreak(event);
         }
         player.sendMessage("Has picado un bloque!");
     }
@@ -93,7 +91,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
             if (profession != null)
             {
-                profession.performProfessionAction(event);
+                profession.onEntityDeath(event);
             }
             player.sendMessage("Has matado un entidad!");
         }
@@ -109,7 +107,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
             if (profession != null)
             {
-                profession.performProfessionAction(event);
+                profession.onEntityDamage(event);
             }
             event.getDamager().sendMessage("Has atacado a un entidad!");
         }
@@ -127,7 +125,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
                 if (profession != null)
                 {
-                    profession.performProfessionAction(event);
+                    profession.onEntityBreed(event);
                 }
                 player.sendMessage("Has has apareado a una entidad!");
             }

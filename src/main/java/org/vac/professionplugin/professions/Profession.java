@@ -1,6 +1,5 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -92,19 +91,19 @@ public abstract class Profession {
         }
     }
 
-    public void performProfessionAction(BlockBreakEvent event)
+    public void onBlockBreak(BlockBreakEvent event)
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
-    public void performProfessionAction(EntityDeathEvent event)
+    public void onEntityDeath(EntityDeathEvent event)
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
-    public void performProfessionAction(EntityDamageByEntityEvent event)
+    public void onEntityDamage(EntityDamageByEntityEvent event)
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
-    public void performProfessionAction(EntityBreedEvent event)
+    public void onEntityBreed(EntityBreedEvent event)
     {
         ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
     }
