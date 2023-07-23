@@ -6,10 +6,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityBreedEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.*;
 import org.vac.professionplugin.ProfessionManager;
 
 public class Hunter extends Profession
@@ -32,8 +29,8 @@ public class Hunter extends Profession
         {
             if (belongToProfession(entityDataProfession))
             {
-                Material original = Material.getMaterial(entityDataProfession.materialOriginal);
-                Material cooked = Material.getMaterial(entityDataProfession.materialCooked);
+//                Material original = Material.getMaterial(entityDataProfession.materialOriginal);
+//                Material cooked = Material.getMaterial(entityDataProfession.materialCooked);
 
                 // Cocina la carne despues de lvl 5 de profesion
 //                if (entityDataProfession.allowedCooked && getLevel() >= 5)

@@ -104,7 +104,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         // Verifica si el daño es causado por un jugador
         if (event.getDamager() instanceof Player)
         {
-            Player player = (Player) event.getEntity();
+            Player player = (Player) event.getDamager();
             Profession profession = DataBase.getPlayerProfession(player);
 
             if (profession != null)
