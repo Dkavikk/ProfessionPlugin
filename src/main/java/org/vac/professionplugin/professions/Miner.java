@@ -107,27 +107,33 @@ public class Miner extends Profession
     }
 
     @Override
-    public void Level5Reward()
+    public void level5Reward()
     {
         // TODO Insignia de profesion lvl 5
     }
 
     @Override
-    public void Level10Reward()
+    public void level10Reward()
     {
         // TODO Insignia de profesion lvl 10
     }
 
     @Override
-    public void Level15Reward()
+    public void level15Reward()
     {
         // TODO Insignia de profesion lvl 15
     }
 
     @Override
-    public void Level20Reward()
+    public void level20Reward()
     {
         // TODO Insignia de profesion lvl 20
+    }
+
+    @Override
+    public void leaveProfession()
+    {
+
     }
 
     private int calculateExperienceByLVL()

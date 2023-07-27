@@ -2,21 +2,28 @@ package org.vac.professionplugin.inventory;
 
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoreItemInventory
 {
     // TODO refactorizar el retorno, para que sea una lista
-    public static String LORE_MINER_PROFESSION =
-    ChatColor.WHITE + "Se rumorea que hace siglos, \n" +
-                      "un minero excepcional descubrió un mineral extremadamente raro y poderoso \n" +
-                      "en las profundidades de las minas. \n" +
-                      "Desde entonces, \n" +
-                      "los mineros aspiran a encontrar ese mineral legendario \n" +
-                      "para desbloquear su verdadero potencial." +
-                      "\n"+
-                      "\n"+
-    ChatColor.GREEN + "Beneficios pasivos: \n" +
-                      "Experiecia adicional al picar minerales, \n" +
-                      "Probabilidad de obtener minerales extras";
+    public static List<String> LORE_MINER_PROFESSION = new ArrayList<>(List.of(
+     ChatColor.WHITE + "Se rumorea que hace siglos,",
+               ChatColor.WHITE + "un minero excepcional descubrió un mineral extremadamente raro y poderoso" ,
+               ChatColor.WHITE + "en las profundidades de las minas." ,
+               ChatColor.WHITE + "Desde entonces," ,
+               ChatColor.WHITE + "los mineros aspiran a encontrar ese mineral legendario" ,
+               ChatColor.WHITE + "para desbloquear su verdadero potencial." ,
+                                 " ",
+                                 " ",
+               ChatColor.GREEN + "Beneficios pasivos:" ,
+               ChatColor.GREEN + "Experiecia adicional al picar minerales," ,
+               ChatColor.GREEN + "Probabilidad de obtener minerales extras"
+    ));
+
+
+    ;
     public static String LORE_HUNTER_PROFESSION =
     ChatColor.WHITE + "En las profundidades de los bosques ancestrales y las vastas llanuras, \n" +
                       "se alza la figura del Cazador, \n" +

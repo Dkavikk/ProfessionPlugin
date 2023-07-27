@@ -60,7 +60,9 @@ public class ProfessionDataBase
         try
         {
             // Guardar la profesión en la base de datos
-            String query = "INSERT INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) " +
+            String query =
+                    "INSERT " +
+                    "INTO player_professions (player_uuid, profession_name, profession_level, profession_exp) " +
                     "VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, player.getUniqueId().toString());
@@ -92,7 +94,8 @@ public class ProfessionDataBase
             int level;
             float exp;
 
-            String query = "SELECT profession_name, profession_level, profession_exp " +
+            String query =
+                    "SELECT profession_name, profession_level, profession_exp " +
                     "FROM player_professions " +
                     "WHERE player_uuid = ?";
 
@@ -125,7 +128,8 @@ public class ProfessionDataBase
     {
         try
         {
-            String query = "UPDATE player_professions " +
+            String query =
+                    "UPDATE player_professions " +
                     "SET profession_level = ?, profession_exp = ? " +
                     "WHERE player_uuid = ? AND profession_name = ?";
             // Actualiza el nivel de la profesión en la base de datos
@@ -155,6 +159,12 @@ public class ProfessionDataBase
     {
         try
         {
+            getPlayerProfession(player).leaveProfession();
+
+            String query =
+                    "DELETE " +
+                    "FROM player_professions " +
+                    "WHERE player_uuid = ?";
             // Eliminar la información de la profesión del jugador en la base de datos
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM player_professions WHERE player_uuid = ?"

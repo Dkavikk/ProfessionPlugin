@@ -16,9 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.ArrayList;
@@ -227,13 +225,13 @@ public class ProfessionInventoryController implements Listener
     {
         setProfessioInventory = ProfessionManager.getInstance().getServer().createInventory(null, 9, ChatColor.BOLD + "Profesiones");
 
-        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, " ", " ");
+        ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, " ", new ArrayList<>());
 
         ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, "Minero", LoreItemInventory.LORE_MINER_PROFESSION);
-        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador", "");
-        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, "Granjero", "");
-        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, "Cazador", LoreItemInventory.LORE_HUNTER_PROFESSION);
-        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, "Constructor", "");
+        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador", new ArrayList<>());
+        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, "Granjero", new ArrayList<>());
+        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, "Cazador", LoreItemInventory.LORE_MINER_PROFESSION);
+        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, "Constructor", new ArrayList<>());
 
         setProfessioInventory.setItem(0, emptyItem);
         setProfessioInventory.setItem(1, emptyItem);
@@ -273,43 +271,40 @@ public class ProfessionInventoryController implements Listener
         //Vaca seta
         //Zorro
 
-        setAnimalTrackerInventory.setItem(0, createProfessionTypeItem(Material.COMPASS, "Abaja", ""));
-        setAnimalTrackerInventory.setItem(1, createProfessionTypeItem(Material.COMPASS, "Ajolote", ""));
-        setAnimalTrackerInventory.setItem(2, createProfessionTypeItem(Material.COMPASS, "Caballo", ""));
-        setAnimalTrackerInventory.setItem(3, createProfessionTypeItem(Material.COMPASS, "Cabra", ""));
-        setAnimalTrackerInventory.setItem(4, createProfessionTypeItem(Material.COMPASS, "Camello", ""));
-        setAnimalTrackerInventory.setItem(5, createProfessionTypeItem(Material.COMPASS, "Cerdo", ""));
-        setAnimalTrackerInventory.setItem(6, createProfessionTypeItem(Material.COMPASS, "Conejo", ""));
-        setAnimalTrackerInventory.setItem(7, createProfessionTypeItem(Material.COMPASS, "Gallina", ""));
-        setAnimalTrackerInventory.setItem(8, createProfessionTypeItem(Material.COMPASS, "Gato", ""));
-        setAnimalTrackerInventory.setItem(9, createProfessionTypeItem(Material.COMPASS, "Lobo", ""));
-        setAnimalTrackerInventory.setItem(10, createProfessionTypeItem(Material.COMPASS, "Loro", ""));
-        setAnimalTrackerInventory.setItem(11, createProfessionTypeItem(Material.COMPASS, "Ocelote", ""));
-        setAnimalTrackerInventory.setItem(12, createProfessionTypeItem(Material.COMPASS, "Oso polar", ""));
-        setAnimalTrackerInventory.setItem(13, createProfessionTypeItem(Material.COMPASS, "Oveja", ""));
-        setAnimalTrackerInventory.setItem(14, createProfessionTypeItem(Material.COMPASS, "Panda", ""));
-        setAnimalTrackerInventory.setItem(15, createProfessionTypeItem(Material.COMPASS, "Rana", ""));
-        setAnimalTrackerInventory.setItem(16, createProfessionTypeItem(Material.COMPASS, "Sniffer", ""));
-        setAnimalTrackerInventory.setItem(17, createProfessionTypeItem(Material.COMPASS, "Tortuga", ""));
-        setAnimalTrackerInventory.setItem(18, createProfessionTypeItem(Material.COMPASS, "Vaca", ""));
-        setAnimalTrackerInventory.setItem(19, createProfessionTypeItem(Material.COMPASS, "Vaca seta", ""));
-        setAnimalTrackerInventory.setItem(20, createProfessionTypeItem(Material.COMPASS, "Zorro", ""));
+        setAnimalTrackerInventory.setItem(0, createProfessionTypeItem(Material.COMPASS, "Abaja", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(1, createProfessionTypeItem(Material.COMPASS, "Ajolote", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(2, createProfessionTypeItem(Material.COMPASS, "Caballo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(3, createProfessionTypeItem(Material.COMPASS, "Cabra", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(4, createProfessionTypeItem(Material.COMPASS, "Camello", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(5, createProfessionTypeItem(Material.COMPASS, "Cerdo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(6, createProfessionTypeItem(Material.COMPASS, "Conejo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(7, createProfessionTypeItem(Material.COMPASS, "Gallina", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(8, createProfessionTypeItem(Material.COMPASS, "Gato", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(9, createProfessionTypeItem(Material.COMPASS, "Lobo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(10, createProfessionTypeItem(Material.COMPASS, "Loro", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(11, createProfessionTypeItem(Material.COMPASS, "Ocelote", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(12, createProfessionTypeItem(Material.COMPASS, "Oso polar", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(13, createProfessionTypeItem(Material.COMPASS, "Oveja", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(14, createProfessionTypeItem(Material.COMPASS, "Panda", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(15, createProfessionTypeItem(Material.COMPASS, "Rana", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(16, createProfessionTypeItem(Material.COMPASS, "Sniffer", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(17, createProfessionTypeItem(Material.COMPASS, "Tortuga", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(18, createProfessionTypeItem(Material.COMPASS, "Vaca", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(19, createProfessionTypeItem(Material.COMPASS, "Vaca seta", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(20, createProfessionTypeItem(Material.COMPASS, "Zorro", new ArrayList<>()));
 
     }
 
 
-    private ItemStack createProfessionTypeItem(Material material, @NotNull String name, String description)
+    private ItemStack createProfessionTypeItem(Material material, String name, List<String> description)
     {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        List<String> lore = new ArrayList<>();
-        lore.add(description);
-
         Objects.requireNonNull(meta).setDisplayName(ChatColor.GREEN + name);
         if (!description.isEmpty())
         {
-            Objects.requireNonNull(meta).setLore(lore);
+            Objects.requireNonNull(meta).setLore(description);
         }
         item.setItemMeta(meta);
 
