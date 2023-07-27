@@ -1,5 +1,7 @@
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\ProfessionCommands.java
+T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\custom_items\InteractionCustomItemsListener.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\GetProfessionCommand.java
+T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\custom_items\CustomAnimalTrackerItem.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\BlockDataProfession.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Profession.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\CommandsTest.java
@@ -8,7 +10,6 @@ T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\EntityDat
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionDataBase.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\inventory\LoreItemInventory.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionManager.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\HunterProfessionData.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Miner.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\SetProfessionCommandTabCompletation.java
 T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\inventory\ProfessionInventoryController.java

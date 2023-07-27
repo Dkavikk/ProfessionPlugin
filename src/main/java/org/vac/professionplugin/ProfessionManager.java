@@ -1,11 +1,23 @@
 package org.vac.professionplugin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.vac.professionplugin.commands.*;
+import org.vac.professionplugin.custom_items.CustomAnimalTrackerItem;
+import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
 import org.vac.professionplugin.professions.Profession;
 
@@ -23,7 +35,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
 {
     private static ProfessionManager instance;
     private ProfessionDataBase DataBase;
-
     private ProfessionInventoryController inventoryController;
 
     @Override
@@ -36,6 +47,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
         inventoryController = new ProfessionInventoryController();
         inventoryController.CreateSetProfessionInventory();
+        inventoryController.CreateAnimalTrackerInventory();
 
         Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
         //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
@@ -43,6 +55,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         Objects.requireNonNull(getCommand("salirprofesion")).setExecutor(new LeavingProfessionCommand());
         Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new InteractionCustomItemsListener(), this);
     }
 
     @Override
@@ -51,7 +64,49 @@ public class ProfessionManager extends JavaPlugin implements Listener
         DataBase.disconnectFromDatabase();
     }
 
-
+    // Evento para manejar el uso del Animal Tracker
+//    @EventHandler
+//    public void onAnimalTrackerUse(PlayerInteractEvent event) {
+//        Player player = event.getPlayer();
+//        ItemStack item = player.getInventory().getItemInMainHand();
+//
+//        for (Entity entity : targetPlayer.getNearbyEntities(radius, radius, radius))
+//        {
+//            // Verifica si la entidad es un animal
+//            if (entity instanceof Animals)
+//            {
+//                Animals animal = (Animals) entity;
+//
+//                if (animal.getType() == animalTracker)
+//                {
+//                    ScoreboardManager manager = Bukkit.getScoreboardManager();
+//                    Scoreboard board = Objects.requireNonNull(manager).getNewScoreboard();
+//                    Team team = board.registerNewTeam("animalTracker");
+//                    team.setColor(ChatColor.GOLD);
+//                    team.addEntry(animal.getUniqueId().toString());
+//
+//                    // Aplica el efecto "glowing"
+//                    animal.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 20, 0, false, false));
+//                }
+//
+//            }
+//        }
+//
+//
+//        // Comprueba si el jugador está usando el Animal Tracker
+//        if (item != null && item.getType() == Material.COMPASS && item.getItemMeta().getDisplayName().equals("Animal Tracker")) {
+//            // Obtiene las entidades cercanas al jugador
+//            for (Entity entity : player.getNearbyEntities(20, 20, 20)) { // Ajusta los valores para definir el rango de búsqueda
+//                // Comprueba si la entidad es un animal
+//                if (entity instanceof AnimalTamer) {
+//                    // Muestra partículas sobre el animal
+//                    entity.getWorld().spawnParticle(Particle.HEART, entity.getLocation().add(0, 1, 0), 10);
+//                }
+//            }
+//            // Si quieres agregar algún mensaje al jugador cuando use el Animal Tracker, puedes usar el siguiente código:
+//            // player.sendMessage("Animales cercanos detectados!");
+//        }
+//    }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
@@ -64,6 +119,11 @@ public class ProfessionManager extends JavaPlugin implements Listener
         {
             event.setCancelled(true);
             inventoryController.OnSetProfessionInventory(event);
+        }
+        else if (event.getInventory() == inventoryController.getSetAnimalTrackerInventory())
+        {
+            event.setCancelled(true);
+            inventoryController.onAnimalTrackerInventory(event);
         }
     }
     @EventHandler

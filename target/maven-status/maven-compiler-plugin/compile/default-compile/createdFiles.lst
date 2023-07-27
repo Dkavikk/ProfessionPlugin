@@ -1,3 +1,4 @@
+org\vac\professionplugin\custom_items\CustomAnimalTrackerItem.class
 org\vac\professionplugin\professions\Miner.class
 org\vac\professionplugin\commands\SetProfessionCommand.class
 org\vac\professionplugin\commands\ProfessionCommands.class
@@ -6,11 +7,13 @@ org\vac\professionplugin\commands\GetProfessionCommand.class
 org\vac\professionplugin\inventory\LoreItemInventory.class
 org\vac\professionplugin\professions\Farmer.class
 org\vac\professionplugin\commands\SetProfessionCommandTabCompletation.class
+org\vac\professionplugin\custom_items\InteractionCustomItemsListener.class
 org\vac\professionplugin\commands\LeavingProfessionCommand.class
 org\vac\professionplugin\ProfessionDataBase.class
 org\vac\professionplugin\professions\EntityDataProfession.class
 org\vac\professionplugin\commands\CommandsTest.class
 org\vac\professionplugin\inventory\ProfessionInventoryController.class
 org\vac\professionplugin\professions\BlockDataProfession.class
+org\vac\professionplugin\inventory\ProfessionInventoryController$1.class
 org\vac\professionplugin\ProfessionManager.class
 org\vac\professionplugin\professions\Profession.class

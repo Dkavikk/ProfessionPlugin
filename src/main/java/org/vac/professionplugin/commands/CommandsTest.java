@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.vac.professionplugin.ProfessionManager;
+import org.vac.professionplugin.custom_items.CustomAnimalTrackerItem;
 
 public class CommandsTest implements CommandExecutor
 {
@@ -25,7 +25,9 @@ public class CommandsTest implements CommandExecutor
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El " + player.getName() + " trato de usar el comando /test");
                 return true;
             }
-            player.setWalkSpeed(0.2f);
+            player.getInventory().addItem(new CustomAnimalTrackerItem());
+
+            player.sendMessage(ChatColor.YELLOW + "¡Has recibido un Rastreador de animales!");
 
             return true;
         }
