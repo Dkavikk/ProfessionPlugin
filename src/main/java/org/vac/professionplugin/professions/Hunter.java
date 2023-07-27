@@ -1,5 +1,6 @@
 package org.vac.professionplugin.professions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -94,13 +95,14 @@ public class Hunter extends Profession
     @Override
     public void newLevel()
     {
+        super.newLevel();
     }
 
     @Override
     public void Level5Reward()
     {
         // TODO Insignia de profesion lvl 5
-
+        Bukkit.getConsoleSender().sendMessage("1");
         AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
         double increasedMaxHealth = maxHealthAttribute.getBaseValue() + (2.0);
         maxHealthAttribute.setBaseValue(increasedMaxHealth);
@@ -110,6 +112,7 @@ public class Hunter extends Profession
     public void Level10Reward()
     {
         // TODO Insignia de profesion lvl 10
+        getPlayer().sendMessage("Has conseguido la habilidad de Tiro Preciso");
     }
 
     @Override

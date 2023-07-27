@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 public class LoreItemInventory
 {
+    // TODO refactorizar el retorno, para que sea una lista
     public static String LORE_MINER_PROFESSION =
     ChatColor.WHITE + "Se rumorea que hace siglos, \n" +
                       "un minero excepcional descubrió un mineral extremadamente raro y poderoso \n" +
