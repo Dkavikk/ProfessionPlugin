@@ -29,9 +29,10 @@ public class CustomAnimalTrackerItem extends ItemStack
         super(Material.COMPASS); // Establece el material del item (brújula en este caso)
 
         ItemMeta meta = getItemMeta();
-
+        
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GREEN + "Este Item permite selecionar un animal \npara buscar durante 20 segudos");
+        lore.add(ChatColor.GREEN + "Este Item permite selecionar un animal");
+        lore.add(ChatColor.GREEN + "para buscar durante 20 segudos");
 
         Objects.requireNonNull(meta).setDisplayName(ChatColor.DARK_PURPLE + "Rastreador de animales"); // Nombre del item que se mostrará en el inventario
         Objects.requireNonNull(meta).setLore(lore); // Descripcion del item que se mostrará en el inventario

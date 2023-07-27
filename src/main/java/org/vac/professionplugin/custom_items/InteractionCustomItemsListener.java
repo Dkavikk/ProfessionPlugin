@@ -19,14 +19,19 @@ public class InteractionCustomItemsListener implements Listener
     {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
+        Profession profession = ProfessionManager.getInstance().getDataBase().getPlayerProfession(player);
 
         // Verifica si el jugador está usando el Animal Tracker
         if (item != null && item.getType() == Material.COMPASS && item.getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "Rastreador de animales"))
         {
-            Profession profession = ProfessionManager.getInstance().getDataBase().getPlayerProfession(player);
-            // TODO Verificar profecion y nivel valido
-            
-            CustomAnimalTrackerItem.trackAnimals(player);
+            if (profession.getName().equals("Cazador"))
+            {
+                if (profession.getLevel() >= 15)
+                {
+                    CustomAnimalTrackerItem.trackAnimals(player);
+                }
+            }
+
         }
     }
 }
