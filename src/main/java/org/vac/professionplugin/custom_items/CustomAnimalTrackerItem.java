@@ -29,7 +29,7 @@ public class CustomAnimalTrackerItem extends ItemStack
         super(Material.COMPASS); // Establece el material del item (brújula en este caso)
 
         ItemMeta meta = getItemMeta();
-        
+
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GREEN + "Este Item permite selecionar un animal");
         lore.add(ChatColor.GREEN + "para buscar durante 20 segudos");

@@ -1,11 +1,9 @@
 package org.vac.professionplugin.professions;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
@@ -123,28 +121,24 @@ public class Hunter extends Profession
         // Verifica si el inventario del jugador tiene espacio para el item
         if (getPlayer().getInventory().firstEmpty() != -1)
         {
-            // Dale el item al jugador
             getPlayer().getInventory().addItem(customItem);
-
             getPlayer().sendMessage(ChatColor.YELLOW + "¡Has recibido un Rastreador de animales!");
         }
         else
         {
             // El inventario del jugador está lleno, deja caer el item al suelo en su posición actual
-            Item droppedItem = getPlayer().getWorld().dropItem(getPlayer().getLocation(), customItem);
-
+            getPlayer().getWorld().dropItem(getPlayer().getLocation(), customItem);
             getPlayer().sendMessage(ChatColor.YELLOW + "Tu inventario está lleno. El Rastreador de animales ha sido dejado en el suelo.");
         }
-
-        AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        double increasedMaxHealth = maxHealthAttribute.getBaseValue() + (2.0);
-        maxHealthAttribute.setBaseValue(increasedMaxHealth);
     }
 
     @Override
     public void Level20Reward()
     {
         // TODO Insignia de profesion lvl 20
+        AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        double increasedMaxHealth = maxHealthAttribute.getBaseValue() + (2.0);
+        maxHealthAttribute.setBaseValue(increasedMaxHealth);
     }
 
     private float getExtraDamageForLVL()
