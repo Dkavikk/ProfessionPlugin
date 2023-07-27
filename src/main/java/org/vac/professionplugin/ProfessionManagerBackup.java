@@ -1,18 +1,23 @@
 package org.vac.professionplugin;
 
+/*import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.vac.professionplugin.commands.*;
+import org.jetbrains.annotations.NotNull;
+import org.vac.professionplugin.commands.ProfessionCommands;
+import org.vac.professionplugin.commands.ProfessionTabCompletation;
 import org.vac.professionplugin.professions.Profession;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,11 +31,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.UUID;*/
 
-public class ProfessionManager extends JavaPlugin implements Listener
+public class ProfessionManagerBackup /*extends JavaPlugin implements Listener*/
 {
-    private static ProfessionManager instance;
+    /*private static ProfessionManager instance;
     private static Connection connection;
 
     private List<BukkitRunnable>repeatTasks;
@@ -68,12 +73,12 @@ public class ProfessionManager extends JavaPlugin implements Listener
         {
             connection = DriverManager.getConnection(databaseURL, username, password);
             Bukkit.getConsoleSender().sendMessage("[ProfessionPlugin] "+ ChatColor.GREEN + "Connected to the database!");
-            Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
-            //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
-            Objects.requireNonNull(getCommand("getprofesion")).setExecutor(new GetProfessionCommand());
-            Objects.requireNonNull(getCommand("salirprofesion")).setExecutor(new LeavingProfessionCommand());
-            Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
-            //Objects.requireNonNull(getCommand("test")).setExecutor(this);
+            Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new ProfessionCommands());
+            Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new ProfessionTabCompletation());
+            Objects.requireNonNull(getCommand("getprofesion")).setExecutor(new ProfessionCommands());
+            Objects.requireNonNull(getCommand("salirprofesion")).setExecutor(new ProfessionCommands());
+            //Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
+            Objects.requireNonNull(getCommand("test")).setExecutor(this);
 
             getServer().getPluginManager().registerEvents(this, this);
         }
@@ -101,6 +106,28 @@ public class ProfessionManager extends JavaPlugin implements Listener
             e.printStackTrace();
         }
     }
+
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args)
+    {
+        if (command.getName().equalsIgnoreCase("test"))
+        {
+            Player player = (Player) sender;
+
+            if (!player.isOp())
+            {
+                sender.sendMessage(ChatColor.RED + "Que wea asi mierda metia!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Que wea asi mierda metia!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El " + player.getName() + " trato de usar el comando /test");
+                return true;
+            }
+            openProfessionInventory(player);
+
+            return true;
+        }
+
+        return false;
+    }
+
 
 
     @EventHandler
@@ -155,7 +182,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
                 Player targetPlayer = (Player) event.getWhoClicked();
                 String professionName = "";
 
-                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + " "))
+                if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.YELLOW + ""))
                 {
                     return;
                 }
@@ -218,13 +245,15 @@ public class ProfessionManager extends JavaPlugin implements Listener
     public void onBlockBreak(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
+        Block block = event.getBlock();
         player.sendMessage("Has picado un bloque!");
 
         Profession profession = getPlayerProfessionByDB(player);
 
         if (profession != null)
         {
-            profession.performProfessionAction(event);
+            Material blockType = block.getType();
+            profession.performProfessionAction(blockType);
             UpdateProfessionInDB(player, profession);
         }
     }
@@ -243,7 +272,8 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
             if (profession != null)
             {
-                profession.performProfessionAction(event);
+                EntityType entityType = entity.getType();
+                profession.performProfessionAction(entityType);
                 UpdateProfessionInDB(player, profession);
             }
         }
@@ -358,5 +388,5 @@ public class ProfessionManager extends JavaPlugin implements Listener
 
         return item;
     }
-
+*/
 }

@@ -1,16 +1,11 @@
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\ProfessionCommands.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\GetProfessionCommand.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\MinerProfessionData.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Profession.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\CommandsTest.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\SetProfessionCommand.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionDataBase.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\inventory\LoreItemInventory.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionManager.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\HunterProfessionData.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Miner.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\SetProfessionCommandTabCompletation.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\inventory\ProfessionInventoryController.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Farmer.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Hunter.java
-T:\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\LeavingProfessionCommand.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\ProfessionCommands.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Hunter.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Profession.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\LeavingProfessionCommand.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionManager.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\ProfessionManagerBackup.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\CommandsTest.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\SetProfessionCommandTabCompletation.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\SetProfessionCommand.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\professions\Miner.java
+T:\Test plugin\ProfessionPlugin\src\main\java\org\vac\professionplugin\commands\GetProfessionCommand.java

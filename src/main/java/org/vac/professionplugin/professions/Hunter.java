@@ -1,16 +1,12 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
-import org.vac.professionplugin.HunterProfessionData;
-import org.vac.professionplugin.ProfessionManager;
-
-import java.util.Objects;
 
 public class Hunter extends Profession
 {
@@ -22,62 +18,91 @@ public class Hunter extends Profession
     @Override
     public void performProfessionAction(BlockBreakEvent event)
     {
+        //Block block = event.getBlock();
+        //Material blockType = block.getType();
     }
 
     @Override
     public void performProfessionAction(EntityDeathEvent event)
     {
         LivingEntity entity = event.getEntity();
+        EntityType entityType = entity.getType();
 
-        HunterProfessionData hunterProfessionData = ProfessionManager.getInstance().getDataBase().getHunterProfessionData(entity);
-
-        if (hunterProfessionData != null)
+        if (entityType == EntityType.COW)
         {
-            int amountOfRawMeat = 0;
-            Material original = Material.getMaterial(hunterProfessionData.materialOriginal);
-            Material cooked = Material.getMaterial(hunterProfessionData.materialCooked);
-
-
-            for (ItemStack drop : event.getDrops())
-            {
-                if (drop.getType() == original)
-                {
-                    amountOfRawMeat += drop.getAmount();
-                }
-            }
-            //TODO SOlo cocinar la carne despues de lvl 5
-            event.getDrops().removeIf(item -> item.getType() == original);
-            ItemStack cookedMeat = new ItemStack(Objects.requireNonNull(cooked), amountOfRawMeat);
-            event.getDrops().add(cookedMeat);
+            increaseExperience(5.0f);
         }
     }
 
     @Override
     public void newLevel()
     {
+        if (getLevel() == 5)
+        {
+            Level5Reward();
+        }
+
+        if (getLevel() == 10)
+        {
+            Level10Reward();
+        }
+
+        if (getLevel() == 15)
+        {
+            Level15Reward();
+        }
+
+        if (getLevel() == 20)
+        {
+            Level20Reward();
+        }
+    }
+
+    @Override
+    public void startRepeatTasks()
+    {
+        if (getLevel() >= 5)
+        {
+            Level5Reward();
+        }
+
+        if (getLevel() >= 10)
+        {
+            Level10Reward();
+        }
+
+        if (getLevel() >= 15)
+        {
+            Level15Reward();
+        }
+
+        if (getLevel() >= 20)
+        {
+            Level20Reward();
+        }
     }
 
     @Override
     public void Level5Reward()
     {
-        // TODO Insignia de profesion lvl 5
+
     }
 
     @Override
     public void Level10Reward()
     {
-        // TODO Insignia de profesion lvl 10
+
     }
 
     @Override
     public void Level15Reward()
     {
-        // TODO Insignia de profesion lvl 15
+
     }
 
     @Override
     public void Level20Reward()
     {
-        // TODO Insignia de profesion lvl 20
+
     }
 }

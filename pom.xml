@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.vac</groupId>
-    <artifactId>ProfessionPlugin</artifactId>
+    <artifactId>ProfessionManager</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>ProfessionPlugin</name>
+    <name>ProfessionManager</name>
 
     <properties>
         <java.version>1.8</java.version>

@@ -4,7 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/main/java/org/vac/professionplugin/ProfessionManager.java" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/src/main/java/org/vac/professionplugin/commands/ProfessionCommands.java" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/src/main/java/org/vac/professionplugin/commands/SetProfessionCommand.java" dialect="MariaDB" />
-    <file url="file://$PROJECT_DIR$/src/main/java/org/vac/professionplugin/inventory/ProfessionInventoryController.java" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/src/main/java/org/vac/professionplugin/professions/Miner.java" dialect="MariaDB" />
   </component>
   <component name="SqlResolveMappings">
