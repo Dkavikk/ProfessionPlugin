@@ -1,10 +1,15 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.vac.professionplugin.ProfessionManager;
+
+import java.util.Objects;
 
 public abstract class Profession {
     private final String name;
@@ -59,7 +64,6 @@ public abstract class Profession {
     {
         this.exp += experienceGained;
 
-        player.sendMessage("has resivido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
         // Incremento de experiencia requerida por nivel
         int experienceNextLevel = requiredExperience(this.level);
         if (this.exp >= experienceNextLevel)
@@ -69,6 +73,7 @@ public abstract class Profession {
             this.levelUp = true;
             newLevel();
         }
+        player.sendMessage("has resivido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
     }
 
     public static Profession getProfessionByName(String name, int level, float exp ,Player player)
@@ -87,12 +92,100 @@ public abstract class Profession {
         }
     }
 
-    public abstract void performProfessionAction(BlockBreakEvent event);
-    public abstract void performProfessionAction(EntityDeathEvent event);
-    public abstract void newLevel();
-    public abstract void startRepeatTasks();
+    public abstract void onBlockBreak(BlockBreakEvent event);
+    public abstract void onEntityDeath(EntityDeathEvent event);
+    public abstract void onEntityDamage(EntityDamageByEntityEvent event);
+    public abstract void onPlayerShootBow(EntityShootBowEvent event);
+    public abstract void onEntityBreed(EntityBreedEvent event);
+//    {
+//        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
+//    }
+
+    public void newLevel()
+    {
+        // TODO Add money economy system
+
+        player.sendMessage(ChatColor.GREEN + "Has subido de nivel ");
+        player.sendMessage(ChatColor.GREEN + "Ahora eres nivel: " + level);
+
+        if (getLevel() == 5)
+        {
+            Level5Reward();
+        }
+
+        if (getLevel() == 10)
+        {
+            Level10Reward();
+        }
+
+        if (getLevel() == 15)
+        {
+            Level15Reward();
+        }
+
+        if (getLevel() == 20)
+        {
+            Level20Reward();
+        }
+    }
     public abstract void Level5Reward();
     public abstract void Level10Reward();
     public abstract void Level15Reward();
     public abstract void Level20Reward();
+
+    public boolean belongToProfession(BlockDataProfession data)
+    {
+        if (data.allowedMiner && Objects.equals(name, "Minero"))
+        {
+            return true;
+        }
+        else if (data.allowedHunter && Objects.equals(name, "Cazador"))
+        {
+            return true;
+        }
+        else if (data.allowedC && Objects.equals(name, "c"))
+        {
+            return true;
+        }
+        else if (data.allowedD && Objects.equals(name, "d"))
+        {
+            return true;
+        }
+        else if (data.allowedE && Objects.equals(name, "e"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean belongToProfession(EntityDataProfession data)
+    {
+        if (data.allowedMiner && Objects.equals(name, "Minero"))
+        {
+            return true;
+        }
+        else if (data.allowedHunter && Objects.equals(name, "Cazador"))
+        {
+            return true;
+        }
+        else if (data.allowedC && Objects.equals(name, "c"))
+        {
+            return true;
+        }
+        else if (data.allowedD && Objects.equals(name, "d"))
+        {
+            return true;
+        }
+        else if (data.allowedE && Objects.equals(name, "e"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
