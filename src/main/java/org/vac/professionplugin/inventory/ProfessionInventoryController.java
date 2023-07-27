@@ -16,9 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.ArrayList;
@@ -298,7 +296,7 @@ public class ProfessionInventoryController implements Listener
     }
 
 
-    private ItemStack createProfessionTypeItem(Material material, @NotNull String name, String description)
+    private ItemStack createProfessionTypeItem(Material material, String name, String description)
     {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

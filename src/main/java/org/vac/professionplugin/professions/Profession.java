@@ -7,7 +7,6 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.vac.professionplugin.ProfessionManager;
 
 import java.util.Objects;
 
@@ -110,28 +109,29 @@ public abstract class Profession {
 
         if (getLevel() == 5)
         {
-            Level5Reward();
+            level5Reward();
         }
 
         if (getLevel() == 10)
         {
-            Level10Reward();
+            level10Reward();
         }
 
         if (getLevel() == 15)
         {
-            Level15Reward();
+            level15Reward();
         }
 
         if (getLevel() == 20)
         {
-            Level20Reward();
+            level20Reward();
         }
     }
-    public abstract void Level5Reward();
-    public abstract void Level10Reward();
-    public abstract void Level15Reward();
-    public abstract void Level20Reward();
+    public abstract void level5Reward();
+    public abstract void level10Reward();
+    public abstract void level15Reward();
+    public abstract void level20Reward();
+    public abstract void leaveProfession();
 
     public boolean belongToProfession(BlockDataProfession data)
     {

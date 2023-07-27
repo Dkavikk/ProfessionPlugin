@@ -83,24 +83,23 @@ public class Hunter extends Profession
     }
 
     @Override
-    public void Level5Reward()
+    public void level5Reward()
     {
         // TODO Insignia de profesion lvl 5
-        Bukkit.getConsoleSender().sendMessage("1");
         AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
         double increasedMaxHealth = maxHealthAttribute.getBaseValue() + (2.0);
         maxHealthAttribute.setBaseValue(increasedMaxHealth);
     }
 
     @Override
-    public void Level10Reward()
+    public void level10Reward()
     {
         // TODO Insignia de profesion lvl 10
         getPlayer().sendMessage("Has conseguido la habilidad de Tiro Preciso");
     }
 
     @Override
-    public void Level15Reward()
+    public void level15Reward()
     {
         // TODO Insignia de profesion lvl 15
         ItemStack customItem = new CustomAnimalTrackerItem();
@@ -120,12 +119,19 @@ public class Hunter extends Profession
     }
 
     @Override
-    public void Level20Reward()
+    public void level20Reward()
     {
         // TODO Insignia de profesion lvl 20
         AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
         double increasedMaxHealth = maxHealthAttribute.getBaseValue() + (2.0);
         maxHealthAttribute.setBaseValue(increasedMaxHealth);
+    }
+
+    @Override
+    public void leaveProfession()
+    {
+        AttributeInstance maxHealthAttribute = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        maxHealthAttribute.setBaseValue(20);
     }
 
     private float getExtraDamageForLVL()
