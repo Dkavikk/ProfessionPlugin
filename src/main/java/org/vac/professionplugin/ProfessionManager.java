@@ -1,22 +1,11 @@
 package org.vac.professionplugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
 import org.vac.professionplugin.commands.*;
-import org.vac.professionplugin.custom_items.CustomAnimalTrackerItem;
 import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
 import org.vac.professionplugin.professions.Profession;

@@ -32,26 +32,6 @@ public class Hunter extends Profession
         {
             if (belongToProfession(entityDataProfession))
             {
-//                Material original = Material.getMaterial(entityDataProfession.materialOriginal);
-//                Material cooked = Material.getMaterial(entityDataProfession.materialCooked);
-
-                // Cocina la carne despues de lvl 5 de profesion
-//                if (entityDataProfession.allowedCooked && getLevel() >= 5)
-//                {
-//                    int amountOfRawMeat = 0;
-//                    for (ItemStack drop : event.getDrops())
-//                    {
-//                        if (drop.getType() == original)
-//                        {
-//                            amountOfRawMeat += drop.getAmount();
-//                        }
-//                    }
-//
-//                    event.getDrops().removeIf(item -> item.getType() == original);
-//                    ItemStack cookedMeat = new ItemStack(Objects.requireNonNull(cooked), amountOfRawMeat);
-//                    event.getDrops().add(cookedMeat);
-//                }
-
                 increaseExperience(entityDataProfession.xpKill);
                 ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
             }
@@ -84,7 +64,11 @@ public class Hunter extends Profession
             {
                 if (event.getEntity().getType() == EntityType.WOLF)
                 {
-                    // TODO Probabilidad de que salgo gemelos
+                    if (Math.random() < 0.5)
+                    {
+                        event.getMother().getWorld().spawnEntity(event.getMother().getLocation(), event.getMother().getType());
+                    }
+
                     increaseExperience(entityDataProfession.xpKill);
                     ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
                 }

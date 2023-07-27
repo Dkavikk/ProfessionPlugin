@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.vac.professionplugin.professions.BlockDataProfession;
 import org.vac.professionplugin.professions.EntityDataProfession;
 import org.vac.professionplugin.professions.Profession;
@@ -239,7 +238,7 @@ public class ProfessionDataBase
         return blockDataProfession;
     }
 
-    public EntityDataProfession getEntityDataProfession(@NotNull LivingEntity entity)
+    public EntityDataProfession getEntityDataProfession(LivingEntity entity)
     {
         EntityDataProfession entityDataProfession = null;
         try
