@@ -6,12 +6,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.vac.professionplugin.custom_items.CustomAnimalTrackerItem;
+import org.jetbrains.annotations.NotNull;
+import org.vac.professionplugin.ProfessionManager;
 
 public class CommandsTest implements CommandExecutor
 {
     @Override
-    public boolean onCommand(CommandSender sender,Command command, String label, String[] args)
+    public boolean onCommand(@NotNull CommandSender sender,Command command,@NotNull String label, String[] args)
     {
         if (command.getName().equalsIgnoreCase("test"))
         {
@@ -24,9 +25,7 @@ public class CommandsTest implements CommandExecutor
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "El " + player.getName() + " trato de usar el comando /test");
                 return true;
             }
-            player.getInventory().addItem(new CustomAnimalTrackerItem());
-
-            player.sendMessage(ChatColor.YELLOW + "¡Has recibido un Rastreador de animales!");
+            player.sendMessage(String.valueOf(player.getWalkSpeed()));
 
             return true;
         }
