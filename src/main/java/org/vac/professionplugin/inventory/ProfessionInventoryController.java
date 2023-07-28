@@ -49,10 +49,14 @@ public class ProfessionInventoryController implements Listener
             event.setCancelled(true);
             onAnimalTrackerInventory(event);
         }
-        else if (event.getInventory() == playerViewProfessionInventoryMap.get(player));
+        else if (event.getInventory() == playerViewProfessionInventoryMap.get(player))
         {
             event.setCancelled(true);
             onInventoryProfessionData(event);
+        }
+        else
+        {
+            event.setCancelled(false);
         }
     }
 
@@ -66,7 +70,6 @@ public class ProfessionInventoryController implements Listener
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
         {
             Player player = (Player) event.getWhoClicked();
-            String professionName = "";
 
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(" "))
             {
@@ -80,11 +83,9 @@ public class ProfessionInventoryController implements Listener
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Leñador"))
             {
-                professionName = "Leñador";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Granjero"))
             {
-                professionName = "Granjero";
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Cazador"))
             {
@@ -93,7 +94,6 @@ public class ProfessionInventoryController implements Listener
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Constructor"))
             {
-                professionName = "Constructor";
             }
 
 
@@ -395,11 +395,6 @@ public class ProfessionInventoryController implements Listener
 
         CreateSetProfessionInventory();
         CreateAnimalTrackerInventory();
-    }
-
-    public Inventory getSetProfessioInventory()
-    {
-        return setProfessioInventory;
     }
 
     public Inventory getSetAnimalTrackerInventory()
