@@ -159,29 +159,30 @@ public class ProfessionDataBase
     {
         try
         {
-            getPlayerProfession(player).leaveProfession();
-
-            String query =
-                    "DELETE " +
-                    "FROM player_professions " +
-                    "WHERE player_uuid = ?";
-            // Eliminar la información de la profesión del jugador en la base de datos
-            PreparedStatement statement = connection.prepareStatement(
-                    "DELETE FROM player_professions WHERE player_uuid = ?"
-            );
-            statement.setString(1, player.getUniqueId().toString());
-            int rowsAffected = statement.executeUpdate();
-            statement.close();
-
-            if (rowsAffected > 0)
+            Profession profession = getPlayerProfession(player);
+            if (profession != null)
             {
-                player.sendMessage(ChatColor.GREEN + "¡Has dejado tu profesión!");
+                profession.leaveProfession();
+
+                String query =
+                                "DELETE " +
+                                "FROM player_professions " +
+                                "WHERE player_uuid = ?";
+                // Eliminar la información de la profesión del jugador en la base de datos
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, player.getUniqueId().toString());
+                int rowsAffected = statement.executeUpdate();
+
+                if (rowsAffected > 0)
+                {
+                    player.sendMessage(ChatColor.GREEN + "¡Has dejado tu profesión!");
+                }
+                statement.close();
             }
             else
             {
                 player.sendMessage(ChatColor.RED + "¡No tienes una profesión que dejar!");
             }
-            statement.close();
         }
         catch (SQLException e)
         {
