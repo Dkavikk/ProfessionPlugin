@@ -124,20 +124,20 @@ public class Hunter extends Profession
         ));
         Inventory inventory = ProfessionManager.getInstance().getServer().createInventory(null, 9*3, ChatColor.GREEN + "" + ChatColor.BOLD + getName());
 
-        ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>());
+        ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>(), 1);
 
-        ItemStack professionIcon = createProfessionTypeItem(Material.BOW, ChatColor.DARK_PURPLE + getName(), Lore);
-        ItemStack description = createProfessionTypeItem(Material.ZOMBIE_HEAD, ChatColor.WHITE + "Descripcion", descriptionLore);
-        ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore);
-        ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore);
-        ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore);
-        ItemStack rewardLvL20 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 20", rewardLvL20Lore);
+        ItemStack professionIcon = createProfessionTypeItem(Material.BOW, ChatColor.DARK_PURPLE + getName(), Lore, 1);
+        ItemStack description = createProfessionTypeItem(Material.ZOMBIE_HEAD, ChatColor.WHITE + "Descripcion", descriptionLore, 1);
+        ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore, 5);
+        ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore, 10);
+        ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore, 15);
+        ItemStack rewardLvL20 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 20", rewardLvL20Lore, 20);
         // ItemStack passiveRewardLvL5 = createProfessionTypeItem(Material.FIREWORK_STAR, ChatColor.DARK_AQUA + "Recompensa pasiva de LvL 5", new ArrayList<>());
         // ItemStack passiveRewardLvL10 = createProfessionTypeItem(Material.FIREWORK_STAR, ChatColor.DARK_AQUA + "Recompensa pasiva de LvL 10", new ArrayList<>());
         // ItemStack passiveRewardLvL15 = createProfessionTypeItem(Material.FIREWORK_STAR, ChatColor.DARK_AQUA + "Recompensa pasiva de LvL 15", new ArrayList<>());
         // ItemStack passiveRewardLvL20 = createProfessionTypeItem(Material.FIREWORK_STAR, ChatColor.DARK_AQUA + "Recompensa pasiva de LvL 20", new ArrayList<>());
-        ItemStack buttonAccept = createProfessionTypeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Aceptar", getName());
-        ItemStack buttonCancel = createProfessionTypeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Cancelar", new ArrayList<>());
+        ItemStack buttonAccept = createProfessionTypeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Aceptar", getName(), 1);
+        ItemStack buttonCancel = createProfessionTypeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Cancelar", new ArrayList<>(), 1);
 
         inventory.setItem( 0, professionIcon);
         inventory.setItem( 1, emptyItem);
