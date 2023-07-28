@@ -34,8 +34,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         DataBase.connectToDatabase();
 
         inventoryController = new ProfessionInventoryController();
-        inventoryController.CreateSetProfessionInventory();
-        inventoryController.CreateAnimalTrackerInventory();
+        inventoryController.createInventory();
 
         Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
         //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());

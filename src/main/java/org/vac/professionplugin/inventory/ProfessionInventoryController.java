@@ -22,10 +22,7 @@ import org.vac.professionplugin.ProfessionManager;
 import org.vac.professionplugin.professions.Miner;
 import org.vac.professionplugin.professions.Profession;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ProfessionInventoryController implements Listener
 {
@@ -77,6 +74,7 @@ public class ProfessionInventoryController implements Listener
 
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Minero"))
             {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "1");
                 professionName = "Minero";
                 Profession profession = new Miner(1, 1, player);
                 playerViewProfessionInventoryMap.put(player, profession.getInventoryProfessionData());
@@ -284,7 +282,7 @@ public class ProfessionInventoryController implements Listener
     }
 
 
-    public void CreateSetProfessionInventory()
+    private void CreateSetProfessionInventory()
     {
         setProfessioInventory = ProfessionManager.getInstance().getServer().createInventory(null, 9, ChatColor.BOLD + "Profesiones");
 
@@ -309,7 +307,7 @@ public class ProfessionInventoryController implements Listener
         setProfessioInventory.setItem(8, emptyItem);
     }
 
-    public void CreateAnimalTrackerInventory()
+    private void CreateAnimalTrackerInventory()
     {
         setAnimalTrackerInventory = ProfessionManager.getInstance().getServer().createInventory(null, 27, ChatColor.BOLD + "Profesiones");
         //Abaja
@@ -389,6 +387,14 @@ public class ProfessionInventoryController implements Listener
         item.setItemMeta(meta);
 
         return item;
+    }
+
+    public void createInventory()
+    {
+        playerViewProfessionInventoryMap = new HashMap<>();
+
+        CreateSetProfessionInventory();
+        CreateAnimalTrackerInventory();
     }
 
     public Inventory getSetProfessioInventory()
