@@ -125,12 +125,7 @@ public class Miner extends Profession
                 ChatColor.WHITE + "en las profundidades de las minas." ,
                 ChatColor.WHITE + "Desde entonces," ,
                 ChatColor.WHITE + "los mineros aspiran a encontrar ese mineral legendario" ,
-                ChatColor.WHITE + "para desbloquear su verdadero potencial." ,
-                " ",
-                " ",
-                ChatColor.GREEN + "Beneficios pasivos:" ,
-                ChatColor.GREEN + "Experiecia adicional al picar minerales," ,
-                ChatColor.GREEN + "Probabilidad de obtener minerales extras"
+                ChatColor.WHITE + "para desbloquear su verdadero potencial."
         ));
 
         List<String> descriptionLore = new ArrayList<>(List.of(

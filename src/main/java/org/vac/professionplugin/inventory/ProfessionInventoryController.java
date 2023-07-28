@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.vac.professionplugin.ProfessionManager;
+import org.vac.professionplugin.professions.Hunter;
 import org.vac.professionplugin.professions.Miner;
 import org.vac.professionplugin.professions.Profession;
 
@@ -74,8 +75,6 @@ public class ProfessionInventoryController implements Listener
 
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Minero"))
             {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "1");
-                professionName = "Minero";
                 Profession profession = new Miner(1, 1, player);
                 playerViewProfessionInventoryMap.put(player, profession.getInventoryProfessionData());
             }
@@ -89,7 +88,8 @@ public class ProfessionInventoryController implements Listener
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Cazador"))
             {
-                professionName = "Cazador";
+                Profession profession = new Hunter(1, 1, player);
+                playerViewProfessionInventoryMap.put(player, profession.getInventoryProfessionData());
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Constructor"))
             {
