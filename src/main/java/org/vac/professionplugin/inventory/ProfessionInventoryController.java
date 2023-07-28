@@ -70,7 +70,7 @@ public class ProfessionInventoryController implements Listener
             Player player = (Player) event.getWhoClicked();
             String professionName = "";
 
-            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + " "))
+            if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(" "))
             {
                 return;
             }
@@ -98,14 +98,16 @@ public class ProfessionInventoryController implements Listener
                 professionName = "Constructor";
             }
 
-            player.closeInventory();
-            player.openInventory(playerViewProfessionInventoryMap.get(player));
 
-           //if (!professionName.isEmpty())
-           //{
-           //    ProfessionManager.getInstance().getDataBase().setProfessionDB(player, professionName);
-           //    player.closeInventory();
-           //}
+
+           if (!playerViewProfessionInventoryMap.get(player).isEmpty())
+           {
+               // ProfessionManager.getInstance().getDataBase().setProfessionDB(player, professionName);
+               // player.closeInventory();
+
+               player.closeInventory();
+               player.openInventory(playerViewProfessionInventoryMap.get(player));
+           }
 
 
         }
@@ -288,11 +290,11 @@ public class ProfessionInventoryController implements Listener
 
         ItemStack emptyItem = createProfessionTypeItem(Material.GRAY_STAINED_GLASS_PANE, " ", new ArrayList<>());
 
-        ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, "Minero", LoreItemInventory.LORE_MINER_PROFESSION);
-        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, "Leñador", new ArrayList<>());
-        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, "Granjero", new ArrayList<>());
-        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, "Cazador", LoreItemInventory.LORE_MINER_PROFESSION);
-        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, "Constructor", new ArrayList<>());
+        ItemStack minerItem = createProfessionTypeItem(Material.IRON_PICKAXE, ChatColor.GREEN + "Minero", LoreItemInventory.LORE_MINER_PROFESSION);
+        ItemStack woodcutterItem = createProfessionTypeItem(Material.IRON_AXE, ChatColor.GREEN + "Leñador", new ArrayList<>());
+        ItemStack farmerItem = createProfessionTypeItem(Material.IRON_HOE, ChatColor.GREEN + "Granjero", new ArrayList<>());
+        ItemStack HunterItem = createProfessionTypeItem(Material.BOW, ChatColor.GREEN + "Cazador", LoreItemInventory.LORE_MINER_PROFESSION);
+        ItemStack BuilderItem = createProfessionTypeItem(Material.IRON_SHOVEL, ChatColor.GREEN + "Constructor", new ArrayList<>());
 
         setProfessioInventory.setItem(0, emptyItem);
         setProfessioInventory.setItem(1, emptyItem);
