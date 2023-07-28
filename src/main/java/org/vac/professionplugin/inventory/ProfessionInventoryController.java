@@ -7,6 +7,7 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -18,28 +19,55 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.vac.professionplugin.ProfessionManager;
+import org.vac.professionplugin.professions.Miner;
+import org.vac.professionplugin.professions.Profession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ProfessionInventoryController implements Listener
 {
+    private Map<Player, Inventory> playerViewProfessionInventoryMap;
     private Inventory setProfessioInventory;
     private Inventory setAnimalTrackerInventory;
 
     private int globalCount;
+
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        Player player = (Player) event.getWhoClicked();
+
+        if (event.getInventory() == setProfessioInventory)
+        {
+            event.setCancelled(true);
+            onSetProfessionInventory(event);
+        }
+        else if (event.getInventory() == setAnimalTrackerInventory)
+        {
+            event.setCancelled(true);
+            onAnimalTrackerInventory(event);
+        }
+        else if (event.getInventory() == playerViewProfessionInventoryMap.get(player));
+        {
+            event.setCancelled(true);
+            onInventoryProfessionData(event);
+        }
+    }
 
     public void openSetProfessionInventory(Player player)
     {
         player.openInventory(setProfessioInventory);
     }
 
-    public void OnSetProfessionInventory(InventoryClickEvent event)
+    private void onSetProfessionInventory(InventoryClickEvent event)
     {
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
         {
-            Player targetPlayer = (Player) event.getWhoClicked();
+            Player player = (Player) event.getWhoClicked();
             String professionName = "";
 
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + " "))
@@ -50,6 +78,8 @@ public class ProfessionInventoryController implements Listener
             if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Minero"))
             {
                 professionName = "Minero";
+                Profession profession = new Miner(1, 1, player);
+                playerViewProfessionInventoryMap.put(player, profession.getInventoryProfessionData());
             }
             else if (Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().equals(ChatColor.GREEN + "Leñador"))
             {
@@ -68,18 +98,49 @@ public class ProfessionInventoryController implements Listener
                 professionName = "Constructor";
             }
 
-            if (!professionName.isEmpty())
-            {
-                ProfessionManager.getInstance().getDataBase().setProfessionDB(targetPlayer, professionName);
+            player.closeInventory();
+            player.openInventory(playerViewProfessionInventoryMap.get(player));
 
-                targetPlayer.closeInventory();
-            }
+           //if (!professionName.isEmpty())
+           //{
+           //    ProfessionManager.getInstance().getDataBase().setProfessionDB(player, professionName);
+           //    player.closeInventory();
+           //}
 
 
         }
     }
 
-    public void onAnimalTrackerInventory(InventoryClickEvent event)
+    private void onInventoryProfessionData(InventoryClickEvent event)
+    {
+        if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
+        {
+            Player player = (Player) event.getWhoClicked();
+
+            String ItemName = Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName();
+
+            if (ItemName.equals(" "))
+            {
+                return;
+            }
+
+            if (ItemName.equals(ChatColor.GREEN + "Aceptar"))
+            {
+                List<String> professionName = event.getCurrentItem().getItemMeta().getLore();
+                ProfessionManager.getInstance().getDataBase().setProfessionDB(player, Objects.requireNonNull(professionName).get(0));
+                player.closeInventory();
+                playerViewProfessionInventoryMap.remove(player);
+            }
+            else if (ItemName.equals(ChatColor.RED + "Cancelar"))
+            {
+                player.closeInventory();
+                playerViewProfessionInventoryMap.remove(player);
+                openSetProfessionInventory(player);
+            }
+        }
+    }
+
+    private void onAnimalTrackerInventory(InventoryClickEvent event)
     {
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR)
         {
@@ -271,40 +332,57 @@ public class ProfessionInventoryController implements Listener
         //Vaca seta
         //Zorro
 
-        setAnimalTrackerInventory.setItem(0, createProfessionTypeItem(Material.COMPASS, "Abaja", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(1, createProfessionTypeItem(Material.COMPASS, "Ajolote", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(2, createProfessionTypeItem(Material.COMPASS, "Caballo", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(3, createProfessionTypeItem(Material.COMPASS, "Cabra", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(4, createProfessionTypeItem(Material.COMPASS, "Camello", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(5, createProfessionTypeItem(Material.COMPASS, "Cerdo", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(6, createProfessionTypeItem(Material.COMPASS, "Conejo", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(7, createProfessionTypeItem(Material.COMPASS, "Gallina", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(8, createProfessionTypeItem(Material.COMPASS, "Gato", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(9, createProfessionTypeItem(Material.COMPASS, "Lobo", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(10, createProfessionTypeItem(Material.COMPASS, "Loro", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(11, createProfessionTypeItem(Material.COMPASS, "Ocelote", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(12, createProfessionTypeItem(Material.COMPASS, "Oso polar", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(13, createProfessionTypeItem(Material.COMPASS, "Oveja", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(14, createProfessionTypeItem(Material.COMPASS, "Panda", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(15, createProfessionTypeItem(Material.COMPASS, "Rana", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(16, createProfessionTypeItem(Material.COMPASS, "Sniffer", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(17, createProfessionTypeItem(Material.COMPASS, "Tortuga", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(18, createProfessionTypeItem(Material.COMPASS, "Vaca", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(19, createProfessionTypeItem(Material.COMPASS, "Vaca seta", new ArrayList<>()));
-        setAnimalTrackerInventory.setItem(20, createProfessionTypeItem(Material.COMPASS, "Zorro", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(0, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Abaja", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(1, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Ajolote", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(2, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Caballo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(3, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Cabra", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(4, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Camello", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(5, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Cerdo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(6, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Conejo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(7, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Gallina", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(8, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Gato", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(9, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Lobo", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(10, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Loro", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(11, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Ocelote", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(12, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Oso polar", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(13, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Oveja", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(14, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Panda", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(15, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Rana", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(16, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Sniffer", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(17, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Tortuga", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(18, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Vaca", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(19, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Vaca seta", new ArrayList<>()));
+        setAnimalTrackerInventory.setItem(20, createProfessionTypeItem(Material.COMPASS, ChatColor.GREEN + "Zorro", new ArrayList<>()));
 
     }
 
 
-    private ItemStack createProfessionTypeItem(Material material, String name, List<String> description)
+    public static ItemStack createProfessionTypeItem(Material material, String name, List<String> description)
     {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-
-        Objects.requireNonNull(meta).setDisplayName(ChatColor.GREEN + name);
+        Objects.requireNonNull(meta).setDisplayName(name);
         if (!description.isEmpty())
         {
             Objects.requireNonNull(meta).setLore(description);
+        }
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public static ItemStack createProfessionTypeItem(Material material, String name, String description)
+    {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        Objects.requireNonNull(meta).setDisplayName(name);
+
+        List<String> lore = new ArrayList<>();
+        lore.add(description);
+
+        if (!description.isEmpty())
+        {
+            Objects.requireNonNull(meta).setLore(lore);
         }
         item.setItemMeta(meta);
 

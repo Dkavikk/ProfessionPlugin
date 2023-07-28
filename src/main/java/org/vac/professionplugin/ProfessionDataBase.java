@@ -207,6 +207,7 @@ public class ProfessionDataBase
                     "ALLOWED_LUMINARITA_ELFICA, " +
                     "ALLOWED_DUPLICATE, " +
                     "ALLOWED_EXTRA_EXPERIENCE, " +
+                    "HIDDEN_RICHES" +
                     "MATERIAL_DUPLICATE, " +
                     "CHANCE_LVL5, CHANCE_LVL10, CHANCE_LVL15, CHANCE_LVL20 " +
                     "FROM block_data_profession " +
@@ -229,6 +230,7 @@ public class ProfessionDataBase
                         resultSet.getBoolean("allowed_luminarita_elfica"),
                         resultSet.getBoolean("allowed_duplicate"),
                         resultSet.getBoolean("allowed_extra_experience"),
+                        resultSet.getBoolean("hidden_riches"),
                         resultSet.getString("material_duplicate"),
                         resultSet.getDouble("chance_lvl5"),
                         resultSet.getDouble("chance_lvl10"),

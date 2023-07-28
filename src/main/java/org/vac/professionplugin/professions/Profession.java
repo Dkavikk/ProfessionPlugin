@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Objects;
 
@@ -91,15 +92,6 @@ public abstract class Profession {
         }
     }
 
-    public abstract void onBlockBreak(BlockBreakEvent event);
-    public abstract void onEntityDeath(EntityDeathEvent event);
-    public abstract void onEntityDamage(EntityDamageByEntityEvent event);
-    public abstract void onPlayerShootBow(EntityShootBowEvent event);
-    public abstract void onEntityBreed(EntityBreedEvent event);
-//    {
-//        ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(this.player, this);
-//    }
-
     public void newLevel()
     {
         // TODO Add money economy system
@@ -127,6 +119,15 @@ public abstract class Profession {
             level20Reward();
         }
     }
+
+    public abstract Inventory getInventoryProfessionData();
+
+    public abstract void onBlockBreak(BlockBreakEvent event);
+    public abstract void onEntityDeath(EntityDeathEvent event);
+    public abstract void onEntityDamage(EntityDamageByEntityEvent event);
+    public abstract void onPlayerShootBow(EntityShootBowEvent event);
+    public abstract void onEntityBreed(EntityBreedEvent event);
+
     public abstract void level5Reward();
     public abstract void level10Reward();
     public abstract void level15Reward();

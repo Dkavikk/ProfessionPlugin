@@ -102,20 +102,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event)
-    {
-        if (event.getInventory() == inventoryController.getSetProfessioInventory())
-        {
-            event.setCancelled(true);
-            inventoryController.OnSetProfessionInventory(event);
-        }
-        else if (event.getInventory() == inventoryController.getSetAnimalTrackerInventory())
-        {
-            event.setCancelled(true);
-            inventoryController.onAnimalTrackerInventory(event);
-        }
-    }
-    @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
     {
         Player player = event.getPlayer();

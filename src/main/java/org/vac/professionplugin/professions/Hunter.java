@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.vac.professionplugin.ProfessionManager;
 import org.vac.professionplugin.custom_items.CustomAnimalTrackerItem;
@@ -80,6 +81,12 @@ public class Hunter extends Profession
     public void newLevel()
     {
         super.newLevel();
+    }
+
+    @Override
+    public Inventory getInventoryProfessionData()
+    {
+        return null;
     }
 
     @Override
