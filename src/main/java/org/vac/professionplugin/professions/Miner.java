@@ -139,27 +139,28 @@ public class Miner extends Profession
         ));
 
         List<String> rewardLvL5Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "Minería Afortunada: Probabilidad de duplicar minerales"
+                ChatColor.WHITE + "- Minería Afortunada: Probabilidad de duplicar minerales."
         ));
 
         List<String> rewardLvL10Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "1 Corazon adicional",
-                ChatColor.WHITE + "Riquezas Ocultas: probabilidad de encontrar minerales al picar piedra"
+                ChatColor.WHITE + "- 1 Corazon adicional.",
+                ChatColor.WHITE + "- Riquezas Ocultas: probabilidad de encontrar minerales al picar piedra."
         ));
 
         List<String> rewardLvL15Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + ""
+                ChatColor.WHITE + "Ninguna"
         ));
 
         List<String> rewardLvL20Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "Protección Subterránea: proporciona inmunidad temporal a daños de lava y explosiones mientras se está en minas."
+                ChatColor.WHITE + "- Protección Subterránea: proporciona inmunidad temporal a daños de ",
+                ChatColor.WHITE + "lava y explosiones mientras."
         ));
-        Inventory inventory = ProfessionManager.getInstance().getServer().createInventory(null, 9*3, ChatColor.BOLD + getName());
+        Inventory inventory = ProfessionManager.getInstance().getServer().createInventory(null, 9*3, ChatColor.GREEN + "" + ChatColor.BOLD + getName());
 
         ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>());
 
         ItemStack professionIcon = createProfessionTypeItem(Material.IRON_PICKAXE, ChatColor.DARK_PURPLE + "Minero", Lore);
-        ItemStack description = createProfessionTypeItem(Material.IRON_PICKAXE, ChatColor.WHITE + "Descripcion", descriptionLore);
+        ItemStack description = createProfessionTypeItem(Material.STONE, ChatColor.WHITE + "Descripcion", descriptionLore);
         ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore);
         ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore);
         ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore);
