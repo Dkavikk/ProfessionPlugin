@@ -127,7 +127,7 @@ public class Hunter extends Profession
         ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>(), 1);
 
         ItemStack professionIcon = createProfessionTypeItem(Material.BOW, ChatColor.DARK_PURPLE + getName(), Lore, 1);
-        ItemStack description = createProfessionTypeItem(Material.ZOMBIE_HEAD, ChatColor.WHITE + "Descripcion", descriptionLore, 1);
+        ItemStack description = createProfessionTypeItem(Material.ZOMBIE_HEAD, ChatColor.DARK_GREEN + "Descripcion", descriptionLore, 1);
         ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore, 5);
         ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore, 10);
         ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore, 15);
