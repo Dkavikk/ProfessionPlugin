@@ -13,13 +13,14 @@ public class BlockDataProfession
     public boolean allowedLuminaritaElfica;
     public boolean allowedDuplicate;
     public boolean allowedExtraExperience;
+    public boolean hiddenRiches;
     public String materialDuplicate;
     public double chanceLVL5;
     public double chanceLVL10;
     public double chanceLVL15;
     public double chanceLVL20;
 
-    public BlockDataProfession(String materialName, boolean allowedMiner, boolean allowedHunter, boolean allowedC, boolean allowedD, boolean allowedE, float xpBreak, float xpPlace, boolean allowedLuminaritaElfica, boolean allowedDuplicate, boolean allowedExtraExperience, String materialDuplicate, double chanceLVL5, double chanceLVL10, double chanceLVL15, double chanceLVL20)
+    public BlockDataProfession(String materialName, boolean allowedMiner, boolean allowedHunter, boolean allowedC, boolean allowedD, boolean allowedE, float xpBreak, float xpPlace, boolean allowedLuminaritaElfica, boolean allowedDuplicate, boolean allowedExtraExperience, boolean hiddenRiches, String materialDuplicate, double chanceLVL5, double chanceLVL10, double chanceLVL15, double chanceLVL20)
     {
         this.materialName = materialName;
         this.allowedMiner = allowedMiner;
@@ -32,6 +33,7 @@ public class BlockDataProfession
         this.allowedLuminaritaElfica = allowedLuminaritaElfica;
         this.allowedDuplicate = allowedDuplicate;
         this.allowedExtraExperience = allowedExtraExperience;
+        this.hiddenRiches = hiddenRiches;
         this.materialDuplicate = materialDuplicate;
         this.chanceLVL5 = chanceLVL5;
         this.chanceLVL10 = chanceLVL10;

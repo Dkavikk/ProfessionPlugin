@@ -3,7 +3,6 @@ package org.vac.professionplugin;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.vac.professionplugin.commands.*;
 import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
@@ -35,8 +34,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         DataBase.connectToDatabase();
 
         inventoryController = new ProfessionInventoryController();
-        inventoryController.CreateSetProfessionInventory();
-        inventoryController.CreateAnimalTrackerInventory();
+        inventoryController.createInventory();
 
         Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
         //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
@@ -45,6 +43,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new InteractionCustomItemsListener(), this);
+        getServer().getPluginManager().registerEvents(inventoryController, this);
     }
 
     @Override
@@ -101,20 +100,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
     {
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event)
-    {
-        if (event.getInventory() == inventoryController.getSetProfessioInventory())
-        {
-            event.setCancelled(true);
-            inventoryController.OnSetProfessionInventory(event);
-        }
-        else if (event.getInventory() == inventoryController.getSetAnimalTrackerInventory())
-        {
-            event.setCancelled(true);
-            inventoryController.onAnimalTrackerInventory(event);
-        }
-    }
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
     {
