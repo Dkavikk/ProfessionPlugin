@@ -56,7 +56,6 @@ public class ProfessionDataBase
 
     public void setProfessionDB(Player player, String professionName)
     {
-
         try
         {
             // Guardar la profesión en la base de datos
@@ -208,7 +207,7 @@ public class ProfessionDataBase
                     "ALLOWED_LUMINARITA_ELFICA, " +
                     "ALLOWED_DUPLICATE, " +
                     "ALLOWED_EXTRA_EXPERIENCE, " +
-                    "HIDDEN_RICHES" +
+                    "HIDDEN_RICHES," +
                     "MATERIAL_DUPLICATE, " +
                     "CHANCE_LVL5, CHANCE_LVL10, CHANCE_LVL15, CHANCE_LVL20 " +
                     "FROM block_data_profession " +

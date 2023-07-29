@@ -3,6 +3,7 @@ package org.vac.professionplugin.professions;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,10 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.vac.professionplugin.ProfessionManager;
 import org.vac.professionplugin.inventory.LoreItemInventory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static org.vac.professionplugin.inventory.ProfessionInventoryController.createProfessionTypeItem;
 
@@ -55,6 +53,20 @@ public class Miner extends Profession
                     duplicateItem(event, blockDataProfession);
                 }
 
+                if (getLevel() >= 10)
+                {
+                    if (blockDataProfession.hiddenRiches)
+                    {
+                        double chanceOfTreasure = getAdjustedChanceOfTreasure(getPlayer().getInventory().getItemInMainHand());
+                        if (Math.random() <= chanceOfTreasure)
+                        {
+                            Material treasure = getMaterial();
+                            block.setType(treasure);
+                            event.getPlayer().sendMessage("¡Has encontrado un tesoro enterrado de " + treasure.name() + "!");
+                        }
+                    }
+                }
+
                 if (blockDataProfession.allowedExtraExperience)
                 {
                     getPlayer().giveExp(calculateExperienceByLVL());
@@ -64,6 +76,46 @@ public class Miner extends Profession
             }
         }
     }
+
+    private static Material getMaterial()
+    {
+        Map<Material, Double> TREASURE_PROBABILITIES = new HashMap<>();
+        TREASURE_PROBABILITIES.put(Material.DIAMOND_ORE, 0.3); // Probabilidad del 30% de diamantes
+        TREASURE_PROBABILITIES.put(Material.GOLD_ORE, 0.2);    // Probabilidad del 20% de oro
+        TREASURE_PROBABILITIES.put(Material.IRON_ORE, 0.25);   // Probabilidad del 25% de hierro
+        TREASURE_PROBABILITIES.put(Material.EMERALD_ORE, 0.15); // Probabilidad del 15% de esmeraldas
+        TREASURE_PROBABILITIES.put(Material.LAPIS_ORE, 0.1);    // Probabilidad del 10% de lapislázuli
+
+        Random random = new Random();
+        double r = random.nextDouble();
+        double cumulativeProbability = 0.0;
+
+        for (Map.Entry<Material, Double> entry : TREASURE_PROBABILITIES.entrySet()) {
+            cumulativeProbability += entry.getValue();
+            if (r <= cumulativeProbability) {
+                return entry.getKey();
+            }
+        }
+
+        return Material.IRON_ORE;
+    }
+
+    private double getAdjustedChanceOfTreasure(ItemStack item) {
+        int fortuneLevel = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+
+        // La probabilidad aumenta en un 10% por cada nivel de "Fortuna"
+        double chanceIncreasePerFortuneLevel = 0.1;
+
+        double adjustedChance = 0.1 + (fortuneLevel * chanceIncreasePerFortuneLevel);
+
+        // Limitar la probabilidad máxima a 100%
+        if (adjustedChance > 1.0) {
+            adjustedChance = 1.0;
+        }
+
+        return adjustedChance;
+    }
+
 
     private void duplicateItem(BlockBreakEvent event, BlockDataProfession blockDataProfession)
     {
