@@ -1,12 +1,14 @@
 package org.vac.professionplugin;
 
-import org.bukkit.event.entity.EntityBreedEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.vac.professionplugin.commands.*;
 import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
+import org.vac.professionplugin.professions.Miner;
 import org.vac.professionplugin.professions.Profession;
 
 import org.bukkit.entity.LivingEntity;
@@ -14,36 +16,33 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.vac.professionplugin.professions.UndergroundProtection;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ProfessionManager extends JavaPlugin implements Listener
 {
+
     private static ProfessionManager instance;
     private ProfessionDataBase DataBase;
     private ProfessionInventoryController inventoryController;
+    private Map<Player, UndergroundProtection> playerUndergroundProtectionMap;
 
     @Override
     public void onEnable()
     {
         instance = this;
-
         DataBase = new ProfessionDataBase();
         DataBase.connectToDatabase();
-
         inventoryController = new ProfessionInventoryController();
         inventoryController.createInventory();
+        playerUndergroundProtectionMap = new HashMap<>();
 
-        Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
-        //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
-        Objects.requireNonNull(getCommand("getprofesion")).setExecutor(new GetProfessionCommand());
-        Objects.requireNonNull(getCommand("salirprofesion")).setExecutor(new LeavingProfessionCommand());
-        Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
-        getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new InteractionCustomItemsListener(), this);
-        getServer().getPluginManager().registerEvents(inventoryController, this);
+        registerCommands();
+        registerListeners();
     }
 
     @Override
@@ -52,66 +51,45 @@ public class ProfessionManager extends JavaPlugin implements Listener
         DataBase.disconnectFromDatabase();
     }
 
-    // Evento para manejar el uso del Animal Tracker
-//    @EventHandler
-//    public void onAnimalTrackerUse(PlayerInteractEvent event) {
-//        Player player = event.getPlayer();
-//        ItemStack item = player.getInventory().getItemInMainHand();
-//
-//        for (Entity entity : targetPlayer.getNearbyEntities(radius, radius, radius))
-//        {
-//            // Verifica si la entidad es un animal
-//            if (entity instanceof Animals)
-//            {
-//                Animals animal = (Animals) entity;
-//
-//                if (animal.getType() == animalTracker)
-//                {
-//                    ScoreboardManager manager = Bukkit.getScoreboardManager();
-//                    Scoreboard board = Objects.requireNonNull(manager).getNewScoreboard();
-//                    Team team = board.registerNewTeam("animalTracker");
-//                    team.setColor(ChatColor.GOLD);
-//                    team.addEntry(animal.getUniqueId().toString());
-//
-//                    // Aplica el efecto "glowing"
-//                    animal.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 20, 0, false, false));
-//                }
-//
-//            }
-//        }
-//
-//
-//        // Comprueba si el jugador está usando el Animal Tracker
-//        if (item != null && item.getType() == Material.COMPASS && item.getItemMeta().getDisplayName().equals("Animal Tracker")) {
-//            // Obtiene las entidades cercanas al jugador
-//            for (Entity entity : player.getNearbyEntities(20, 20, 20)) { // Ajusta los valores para definir el rango de búsqueda
-//                // Comprueba si la entidad es un animal
-//                if (entity instanceof AnimalTamer) {
-//                    // Muestra partículas sobre el animal
-//                    entity.getWorld().spawnParticle(Particle.HEART, entity.getLocation().add(0, 1, 0), 10);
-//                }
-//            }
-//            // Si quieres agregar algún mensaje al jugador cuando use el Animal Tracker, puedes usar el siguiente código:
-//            // player.sendMessage("Animales cercanos detectados!");
-//        }
-//    }
+    private void registerCommands()
+    {
+        Objects.requireNonNull(getCommand("setprofesion")).setExecutor(new SetProfessionCommand());
+        //Objects.requireNonNull(getCommand("setprofesion")).setTabCompleter(new SetProfessionCommandTabCompletation());
+        Objects.requireNonNull(getCommand("getprofesion")).setExecutor(new GetProfessionCommand());
+        Objects.requireNonNull(getCommand("salirprofesion")).setExecutor(new LeavingProfessionCommand());
+        Objects.requireNonNull(getCommand("test")).setExecutor(new CommandsTest());
+    }
+
+    private void registerListeners()
+    {
+        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new InteractionCustomItemsListener(), this);
+        getServer().getPluginManager().registerEvents(inventoryController, this);
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        Player player = event.getPlayer();
+        Profession profession = DataBase.getPlayerProfession(player);
+
+        if (profession instanceof Miner)
+        {
+            UndergroundProtection undergroundProtection = new UndergroundProtection(player);
+            playerUndergroundProtectionMap.put(player, undergroundProtection);
+        }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
-
         Profession profession = DataBase.getPlayerProfession(player);
 
         if (profession != null)
         {
             profession.onBlockBreak(event);
         }
-        player.sendMessage("Has picado un bloque!");
     }
 
     @EventHandler
@@ -128,7 +106,23 @@ public class ProfessionManager extends JavaPlugin implements Listener
             {
                 profession.onEntityDeath(event);
             }
-            player.sendMessage("Has matado un entidad!");
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event)
+    {
+
+        // Verifica si el daño fue causado a un jugador
+        if (event.getEntity() instanceof Player)
+        {
+            Player player = (Player) event.getEntity();
+            Profession profession = DataBase.getPlayerProfession(player);
+
+            if (profession != null)
+            {
+                profession.onEntityDamage(event);
+            }
         }
     }
 
@@ -145,7 +139,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
             {
                 profession.onEntityDamage(event);
             }
-            event.getDamager().sendMessage("Has atacado a un entidad!");
         }
     }
 
@@ -155,11 +148,38 @@ public class ProfessionManager extends JavaPlugin implements Listener
         if (event.getEntity() instanceof Player)
         {
             Player player = (Player) event.getEntity();
-
             Profession profession = DataBase.getPlayerProfession(player);
+
             if (profession != null)
             {
                 profession.onPlayerShootBow(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        Player player = event.getPlayer();
+        Profession profession = DataBase.getPlayerProfession(player);
+
+        if (profession != null)
+        {
+            profession.onPlayerMove(event);
+        }
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event)
+    {
+        if (event.getEntity() instanceof Player)
+        {
+            Player player = (Player) event.getEntity();
+            Profession profession = DataBase.getPlayerProfession(player);
+
+            if (profession != null)
+            {
+                profession.onEntityExplode(event);
             }
         }
     }
@@ -178,19 +198,25 @@ public class ProfessionManager extends JavaPlugin implements Listener
                 {
                     profession.onEntityBreed(event);
                 }
-                player.sendMessage("Has has apareado a una entidad!");
             }
         }
+    }
+
+    public Map<Player, UndergroundProtection> getPlayerUndergroundProtectionMap()
+    {
+        return playerUndergroundProtectionMap;
     }
 
     public ProfessionDataBase getDataBase()
     {
         return DataBase;
     }
+
     public static ProfessionManager getInstance()
     {
         return instance;
     }
+
     public ProfessionInventoryController getInventoryController()
     {
         return inventoryController;
