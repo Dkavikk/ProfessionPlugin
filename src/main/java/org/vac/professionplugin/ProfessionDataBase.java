@@ -117,7 +117,7 @@ public class ProfessionDataBase
         catch (SQLException e)
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get profession: " + e.getMessage());
-            player.sendMessage(ChatColor.RED + "No tienes una profession");
+            player.sendMessage(ChatColor.RED + "Fallo al tratar de obtener la profesio");
         }
 
         return profession;
