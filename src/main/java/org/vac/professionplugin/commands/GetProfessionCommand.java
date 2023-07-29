@@ -21,11 +21,18 @@ public class GetProfessionCommand implements CommandExecutor
                 return true;
             }
 
-            Player targetPlayer = (Player) sender;
-            Profession playerProfession = ProfessionManager.getInstance().getDataBase().getPlayerProfession(targetPlayer);
-            sender.sendMessage(ChatColor.GREEN + "Profesión de jugador " + targetPlayer.getName() + ": " +
-                    playerProfession.getName() + " " +
-                    "(Level " + playerProfession.getLevel() + ") (exp: " + playerProfession.getExp() +" / " + Profession.requiredExperience(playerProfession.getLevel()) + ")");
+            Player player = (Player) sender;
+            Profession playerProfession = ProfessionManager.getInstance().getDataBase().getPlayerProfession(player);
+            if (playerProfession != null)
+            {
+                sender.sendMessage(ChatColor.GREEN + "Profesión de jugador " + player.getName() + ": " +
+                        playerProfession.getName() + " " +
+                        "(Level " + playerProfession.getLevel() + ") (exp: " + playerProfession.getExp() +" / " + Profession.requiredExperience(playerProfession.getLevel()) + ")");
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + "No tienes una profesion");
+            }
 
             return true;
         }
