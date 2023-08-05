@@ -2,9 +2,16 @@ package org.vac.professionplugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.vac.professionplugin.commands.*;
 import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
@@ -197,6 +204,48 @@ public class ProfessionManager extends JavaPlugin implements Listener
                 if (profession != null)
                 {
                     profession.onEntityBreed(event);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+        Player player = event.getPlayer();
+        Profession profession = DataBase.getPlayerProfession(player);
+
+        if (profession != null)
+        {
+            profession.onBlockPlace(event);
+        }
+    }
+
+    @EventHandler
+    public void onBlockGrow(BlockGrowEvent event)
+    {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 0");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] -" + event.getBlock().getType());
+        Block block = event.getBlock();
+        if (block.getType() == Material.WHEAT || block.getType() == Material.POTATOES || block.getType() == Material.CARROTS)
+        {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 1");
+            // Obtenemos el jugador que plantó el cultivo de los metadatos.
+            if (block.hasMetadata("PlantOwner"))
+            {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 2");
+                String plantOwner = block.getMetadata("PlantOwner").get(0).asString();
+
+                // Verificamos si el jugador está en línea y obtenemos su nivel de crecimiento.
+                Player player = Bukkit.getPlayerExact(plantOwner);
+                if (player != null)
+                {
+                    Profession profession = DataBase.getPlayerProfession(player);
+
+                    if (profession != null)
+                    {
+                        profession.onBlockGrow(event);
+                    }
                 }
             }
         }

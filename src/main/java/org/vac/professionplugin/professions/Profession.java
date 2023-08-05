@@ -3,6 +3,8 @@ package org.vac.professionplugin.professions;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
@@ -100,6 +102,10 @@ public abstract class Profession
 
     public abstract void onBlockBreak(BlockBreakEvent event);
 
+    public abstract void onBlockPlace(BlockPlaceEvent event);
+
+    public abstract void onBlockGrow(BlockGrowEvent event);
+
     public abstract void onEntityDeath(EntityDeathEvent event);
 
     public abstract void onEntityDamage(EntityDamageByEntityEvent event);
@@ -131,7 +137,7 @@ public abstract class Profession
         {
             return true;
         }
-        else if (data.allowedC && Objects.equals(name, "c"))
+        else if (data.allowedC && Objects.equals(name, "Granjero"))
         {
             return true;
         }
@@ -159,7 +165,7 @@ public abstract class Profession
         {
             return true;
         }
-        else if (data.allowedC && Objects.equals(name, "c"))
+        else if (data.allowedC && Objects.equals(name, "Granjero"))
         {
             return true;
         }

@@ -7,6 +7,8 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
@@ -29,6 +31,18 @@ public class Hunter extends Profession
     @Override
     public void onBlockBreak(BlockBreakEvent event)
     {}
+
+    @Override
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+
+    }
+
+    @Override
+    public void onBlockGrow(BlockGrowEvent event)
+    {
+
+    }
 
     @Override
     public void onEntityDeath(EntityDeathEvent event)

@@ -4,15 +4,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.*;
@@ -69,6 +73,16 @@ public class Miner extends Profession
 
             ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
         }
+    }
+
+    @Override
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+    }
+
+    @Override
+    public void onBlockGrow(BlockGrowEvent event)
+    {
     }
 
     @Override
