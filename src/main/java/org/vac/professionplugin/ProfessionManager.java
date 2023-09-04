@@ -205,7 +205,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
         Player player = event.getPlayer();
         Profession profession = DataBase.getPlayerProfession(player);
 
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + profession.getName());
         if (profession != null)
         {
             profession.onBlockPlace(event);

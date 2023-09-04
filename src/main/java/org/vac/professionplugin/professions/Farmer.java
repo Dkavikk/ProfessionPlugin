@@ -10,7 +10,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -65,7 +64,7 @@ public class Farmer extends Profession
         ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>(), 1);
         ItemStack professionIcon = createProfessionTypeItem(Material.IRON_HOE, ChatColor.DARK_PURPLE + "Granjero", Lore, 1);
         ItemStack description = createProfessionTypeItem(Material.WHEAT, ChatColor.WHITE + "Descripción", descriptionLore, 1);
-        ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore, 5);
+        ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 2", rewardLvL5Lore, 5);
         ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore, 10);
         ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore, 15);
         ItemStack rewardLvL20 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 20", rewardLvL20Lore, 20);
@@ -106,7 +105,20 @@ public class Farmer extends Profession
     @Override
     public void onBlockBreak(BlockBreakEvent event)
     {
+        if (getLevel() >= 2)
+        {
+            if (event.getBlock().getType() == Material.GRASS)
+            {
+                if (Math.random() <= 0.25)
+                {
+                    Material[] comestibles = { Material.APPLE, Material.BEETROOT_SEEDS, Material.CARROT, Material.POTATO, Material.WHEAT_SEEDS };
+                    Material semilla = comestibles[(int) (Math.random() * comestibles.length)];
 
+                    ItemStack item = new ItemStack(semilla, 1);
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), item);
+                }
+            }
+        }
     }
 
     @Override
