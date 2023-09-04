@@ -3,6 +3,7 @@ package org.vac.professionplugin.professions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
@@ -10,9 +11,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.vac.professionplugin.ProfessionManager;
 
 import java.util.ArrayList;
@@ -199,6 +204,38 @@ public class Farmer extends Profession
     public void onEntityBreed(EntityBreedEvent event)
     {
 
+    }
+
+    @Override
+    public void onCraftItem(CraftItemEvent event)
+    {
+        Recipe recipe = event.getRecipe();
+
+        // Verifica si el jugador está crafteando pan
+        if (recipe != null && recipe.getResult().getType() == Material.BREAD) {
+            // Obtén el ItemStack resultante del crafting
+            ItemStack craftedItem = event.getInventory().getResult();
+
+            // Aplica el metadato "foodValue" como un Integer
+            if (craftedItem != null) {
+                // Define el valor de foodValue que desees
+                int foodValue = 10; // Cambia este valor según tus necesidades
+
+                // Establece el metadato "foodValue" en el ItemStack
+                craftedItem.getItemMeta().getPersistentDataContainer().set(
+                        // Define la clave "foodValue" como identificador
+                        new NamespacedKey(ProfessionManager.getInstance(), "foodValue"),
+                        // Define el tipo de dato como INTEGER
+                        PersistentDataType.INTEGER,
+                        foodValue
+                );
+
+                // Actualiza el ItemStack con los metadatos aplicados
+                craftedItem.setItemMeta(craftedItem.getItemMeta());
+
+                // Ahora el ItemStack de pan tiene el metadato "foodValue" aplicado
+            }
+        }
     }
 
     @Override

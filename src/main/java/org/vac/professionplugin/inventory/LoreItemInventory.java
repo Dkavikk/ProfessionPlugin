@@ -23,7 +23,6 @@ public class LoreItemInventory
     ));
 
 
-    ;
     public static String LORE_HUNTER_PROFESSION =
     ChatColor.WHITE + "En las profundidades de los bosques ancestrales y las vastas llanuras, \n" +
                       "se alza la figura del Cazador, \n" +

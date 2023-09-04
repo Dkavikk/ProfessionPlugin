@@ -6,6 +6,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -118,6 +119,8 @@ public abstract class Profession
     public abstract void onEntityExplode(EntityExplodeEvent event);
 
     public abstract void onEntityBreed(EntityBreedEvent event);
+
+    public abstract void onCraftItem(CraftItemEvent event);
 
     public abstract void level5Reward();
 

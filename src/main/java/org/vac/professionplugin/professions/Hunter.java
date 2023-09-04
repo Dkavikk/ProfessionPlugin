@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -103,6 +104,12 @@ public class Hunter extends Profession
             increaseExperience(entityDataProfession.xpKill);
             ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
         }
+    }
+
+    @Override
+    public void onCraftItem(CraftItemEvent event)
+    {
+
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -126,6 +127,12 @@ public class Miner extends Profession
     @Override
     public void onEntityBreed(EntityBreedEvent event)
     {
+    }
+
+    @Override
+    public void onCraftItem(CraftItemEvent event)
+    {
+
     }
 
     @Override

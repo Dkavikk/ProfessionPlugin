@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -237,6 +238,18 @@ public class ProfessionManager extends JavaPlugin implements Listener
         }
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] - pos");
+    }
+
+    @EventHandler
+    public void onCraftItem(CraftItemEvent event)
+    {
+        Player player = (Player) event.getWhoClicked();
+        Profession profession = DataBase.getPlayerProfession(player);
+
+        if (profession != null)
+        {
+            profession.onCraftItem(event);
+        }
     }
 
     public Map<Player, UndergroundProtection> getPlayerUndergroundProtectionMap()
