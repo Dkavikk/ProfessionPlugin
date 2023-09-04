@@ -104,12 +104,6 @@ public class Farmer extends Profession
     }
 
     @Override
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
-
-    }
-
-    @Override
     public void onBlockBreak(BlockBreakEvent event)
     {
 

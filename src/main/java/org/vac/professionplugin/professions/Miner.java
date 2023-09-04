@@ -31,11 +31,6 @@ public class Miner extends Profession
     }
 
     @Override
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
-    }
-
-    @Override
     public void onBlockBreak(BlockBreakEvent event)
     {
         Block block = event.getBlock();

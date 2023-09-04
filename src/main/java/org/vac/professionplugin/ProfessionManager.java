@@ -167,18 +167,6 @@ public class ProfessionManager extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
-        Player player = event.getPlayer();
-        Profession profession = DataBase.getPlayerProfession(player);
-
-        if (profession != null)
-        {
-            profession.onPlayerMove(event);
-        }
-    }
-
-    @EventHandler
     public void onEntityExplode(EntityExplodeEvent event)
     {
         if (event.getEntity() instanceof Player)

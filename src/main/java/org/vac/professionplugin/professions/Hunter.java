@@ -190,10 +190,6 @@ public class Hunter extends Profession
     }
 
     @Override
-    public void onPlayerMove(PlayerMoveEvent event)
-    {}
-
-    @Override
     public void level5Reward()
     {
         // TODO Insignia de profesión lvl 5

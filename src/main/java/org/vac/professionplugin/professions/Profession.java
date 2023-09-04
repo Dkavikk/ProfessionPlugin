@@ -102,9 +102,6 @@ public abstract class Profession
     // Métodos abstractos para eventos y recompensas específicas de cada profesión
     public abstract Inventory getInventoryProfessionData();
 
-    // TODO Removed
-    public abstract void onPlayerMove(PlayerMoveEvent event);
-
     public abstract void onBlockBreak(BlockBreakEvent event);
 
     public abstract void onBlockPlace(BlockPlaceEvent event);
