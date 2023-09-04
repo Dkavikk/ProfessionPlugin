@@ -4,366 +4,351 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.vac.professionplugin.ProfessionManager;
 
-import java.nio.DoubleBuffer;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
-public class Miner extends Profession {
+import static org.vac.professionplugin.inventory.ProfessionInventoryController.createProfessionTypeItem;
+
+public class Miner extends Profession
+{
     public Miner(int level, float exp, Player player)
     {
         super("Minero", level, exp, player);
     }
 
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        //        if (getPlayer().getLocation().getBlock().getType() == Material.LAVA)
+        //        {
+        //            UndergroundProtection protection = ProfessionManager.getInstance().getPlayerUndergroundProtectionMap().get(getPlayer());
+        //            protection.activate();
+        //        }
+    }
 
     @Override
-    public void performProfessionAction(BlockBreakEvent event)
+    public void onBlockBreak(BlockBreakEvent event)
     {
         Block block = event.getBlock();
-        Material blockType = block.getType();
-//        if (getExperienceByBlock(blockType) > -1)
-//        {
-//            increaseExperience(getExperienceByBlock(blockType));
-//        }
-//        else
-//        {
-//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No se a ecotrado el material " + blockType.getData().getName());
-//        }
-//
-//        Material material = getAdditionalOre(blockType);
-//        if (material != null)
-//        {
-//            Random random = new Random();
-//            if (random.nextDouble() <= getChanceAdditionalOre(material))
-//            {
-//                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
-//            }
-//        }
+        BlockDataProfession blockDataProfession = ProfessionManager.getInstance().getDataBase().getBlockDataForBlockName(block.getType().name());
 
-        float xp = -1;
-        boolean allowed_duplicate = false;
-        String material_duplicate = "";
-        double chance = 0;
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "____");
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1" + blockType.name());
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "_____");
-
-        try
+        if (blockDataProfession != null && belongToProfession(blockDataProfession))
         {
-            PreparedStatement statement = ProfessionManager.getConnection().prepareStatement(
-                    "SELECT xp, allowed_duplicate, material_duplicate, chance_lvl5, chance_lvl10, chance_lvl15, chance_lvl20 FROM miner_profession WHERE material_name = ?"
-            );
-            statement.setString(1, blockType.name());
-            ResultSet resultSet = statement.executeQuery();
+            increaseExperience(blockDataProfession.xpBreak);
 
-            if (resultSet.next())
+            if (getLevel() >= 5)
             {
-                xp = resultSet.getFloat("xp");
-                allowed_duplicate = resultSet.getBoolean("allowed_duplicate");
-                //allowed_duplicate = resultSet.getInt("allowed_duplicate") == 1;
-                material_duplicate = resultSet.getString("material_duplicate");
-
-                if (getLevel() >= 5)
-                {
-                    chance = resultSet.getDouble("chance_lvl5");
-                }
-                else if (getLevel() >= 10)
-                {
-                    chance = resultSet.getDouble("chance_lvl10");
-                }
-                else if (getLevel() >= 15)
-                {
-                    chance = resultSet.getDouble("chance_lvl15");
-                }
-                else if (getLevel() >= 20)
-                {
-                    chance = resultSet.getDouble("chance_lvl20");
-                }
-            }
-            else
-            {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
+                duplicateItem(event, blockDataProfession);
             }
 
-            resultSet.close();
-            statement.close();
-        }
-        catch (SQLException e)
-        {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get miner_profession: " + e.getMessage());
-        }
-
-        if (xp > -1)
-        {
-            increaseExperience(xp);
-        }
-        else
-        {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Block not found: " + blockType.getData().getName());
-        }
-
-        if (allowed_duplicate)
-        {
-            Material material = Material.getMaterial(material_duplicate);
-            Random random = new Random();
-            if (material != null)
+            if (getLevel() >= 10 && blockDataProfession.hiddenRiches)
             {
-                if (random.nextDouble() <= chance)
+                double chanceOfTreasure = getAdjustedChanceOfTreasure(getPlayer().getInventory().getItemInMainHand());
+                if (Math.random() <= chanceOfTreasure)
                 {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+                    Material treasure = getMaterial();
+                    block.setType(treasure);
+                    event.getPlayer().sendMessage("¡Has encontrado un tesoro enterrado de " + treasure.name() + "!");
                 }
             }
-        }
 
+            if (blockDataProfession.allowedExtraExperience)
+            {
+                getPlayer().giveExp(calculateExperienceByLVL());
+            }
+
+            ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
+        }
     }
 
     @Override
-    public void performProfessionAction(EntityDeathEvent event)
+    public void onEntityDeath(EntityDeathEvent event)
     {
         LivingEntity entity = event.getEntity();
-        EntityType entityType = entity.getType();
+        EntityDataProfession entityDataProfession = ProfessionManager.getInstance().getDataBase().getEntityDataProfession(entity);
 
-        if (entityType == EntityType.BAT) { increaseExperience(0.5f); }
-    }
-
-    @Override
-    public void newLevel()
-    {
-        if (getLevel() == 5)
+        if (entityDataProfession != null && belongToProfession(entityDataProfession))
         {
-            Level5Reward();
-        }
-
-        if (getLevel() == 10)
-        {
-            Level10Reward();
-        }
-
-        if (getLevel() == 15)
-        {
-            Level15Reward();
-        }
-
-        if (getLevel() == 20)
-        {
-            Level20Reward();
+            increaseExperience(entityDataProfession.xpKill);
+            ProfessionManager.getInstance().getDataBase().UpdateProfessionInDB(getPlayer(), this);
         }
     }
 
     @Override
-    public void startRepeatTasks()
+    public void onEntityDamage(EntityDamageByEntityEvent event)
     {
-//        if (getLevel() >= 5)
-//        {
-//            Level5Reward();
-//        }
     }
 
     @Override
-    public void Level5Reward()
+    public void onEntityDamage(EntityDamageEvent event)
     {
-        getPlayer().setWalkSpeed(0.4f);
-
-//        // Crea una nueva tarea programada para repetir el efecto cada 5 minutos
-//        BukkitRunnable repeatTask = new BukkitRunnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                // Aplica el efecto de velocidad nuevamente
-//                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, EFFECT_DURATION, 1));
-//            }
-//        };
-//
-//        ProfessionManager professionManager = ProfessionManager.getInstance();
-//
-//        // agregar la tarea de repetición al professionManager
-//        professionManager.addRepeatTasks(repeatTask);
+        if (getLevel() >= 20)
+        {
+            if ((event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) ||
+                    (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
+                    (event.getCause() == EntityDamageEvent.DamageCause.FIRE) ||
+                    (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK))
+            {
+                UndergroundProtection protection = ProfessionManager.getInstance().getPlayerUndergroundProtectionMap().get(getPlayer());
+                protection.activate();
+                if (protection.isActive())
+                {
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 
     @Override
-    public void Level10Reward()
+    public void onPlayerShootBow(EntityShootBowEvent event)
     {
-
     }
 
     @Override
-    public void Level15Reward()
+    public void onEntityExplode(EntityExplodeEvent event)
     {
-
     }
 
     @Override
-    public void Level20Reward()
+    public void onEntityBreed(EntityBreedEvent event)
     {
-        ItemStack pickaxeItemStack = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-        ItemStack netheriteItemStack = new ItemStack(Material.NETHERITE_SCRAP, 1);
-        ItemStack netheriteUpgradeItemStack = new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1);
-
-        getPlayer().getInventory().addItem(pickaxeItemStack);
-        getPlayer().getInventory().addItem(netheriteItemStack);
-        getPlayer().getInventory().addItem(netheriteUpgradeItemStack);
     }
 
-    private float getExperienceByBlock(Material material)
+    @Override
+    public Inventory getInventoryProfessionData()
     {
-        if (material == Material.STONE)
-                              { if (getLevel() < 3)             {  return 5.0f;   }
-                                else                            {  return 2.5f;   }}
-        else if (material == Material.COBBLESTONE)
-                              { if (getLevel() < 5)             {  return 1.0f;   }
-                                else                            {  return 0.5f;   }}
-        else if (material == Material.NETHERRACK)
-                              { if (getLevel() < 5)             {  return 1.0f;   }
-                                else                            {  return 0.5f;   }}
-        else if (material == Material.SANDSTONE)                {  return 2.0f;   }
-        else if (material == Material.RED_SANDSTONE)            {  return 2.0f;   }
-        else if (material == Material.END_STONE)                {  return 5.0f;   }
-        else if (material == Material.DEEPSLATE)                {  return 2.0f;   }
-        else if (material == Material.CALCITE)                  {  return 4.0f;   }
-        else if (material == Material.TUFF)                     {  return 4.0f;   }
-        else if (material == Material.BLACKSTONE)               {  return 3.0f;   }
-        else if (material == Material.BASALT)                   {  return 1.0f;   }
-        else if (material == Material.ANDESITE)                 {  return 2.0f;   }
-        else if (material == Material.DIORITE)                  {  return 2.0f;   }
-        else if (material == Material.GRANITE)                  {  return 2.0f;   }
-        else if (material == Material.DRIPSTONE_BLOCK)          {  return 3.0f;   }
-        else if (material == Material.AMETHYST_BLOCK)           {  return 8.0f;   }
-        else if (material == Material.BUDDING_AMETHYST)         {  return 11.0f;  }
-        else if (material == Material.SMALL_AMETHYST_BUD)       {  return 0.2f;   }
-        else if (material == Material.MEDIUM_AMETHYST_BUD)      {  return 0.5f;   }
-        else if (material == Material.LARGE_AMETHYST_BUD)       {  return 1.0f;   }
-        else if (material == Material.AMETHYST_CLUSTER)         {  return 2.0f;   }
-        else if (material == Material.COAL_ORE)                 {  return 3.0f;   }
-        else if (material == Material.IRON_ORE)                 {  return 4.0f;   }
-        else if (material == Material.COPPER_ORE)               {  return 4.0f;   }
-        else if (material == Material.GOLD_ORE)                 {  return 7.0f;   }
-        else if (material == Material.LAPIS_ORE)                {  return 6.0f;   }
-        else if (material == Material.REDSTONE_ORE)             {  return 8.0f;   }
-        else if (material == Material.EMERALD_ORE)              {  return 10.0f;  }
-        else if (material == Material.DIAMOND_ORE)              {  return 9.0f;   }
-        else if (material == Material.DEEPSLATE_COAL_ORE)       {  return 5.0f;   }
-        else if (material == Material.DEEPSLATE_IRON_ORE)       {  return 5.0f;   }
-        else if (material == Material.DEEPSLATE_COPPER_ORE)     {  return 9.0f;   }
-        else if (material == Material.DEEPSLATE_GOLD_ORE)       {  return 6.0f;   }
-        else if (material == Material.DEEPSLATE_LAPIS_ORE)      {  return 6.5f;   }
-        else if (material == Material.DEEPSLATE_REDSTONE_ORE)   {  return 6.0f;   }
-        else if (material == Material.DEEPSLATE_EMERALD_ORE)    {  return 15.0f;  }
-        else if (material == Material.DEEPSLATE_DIAMOND_ORE)    {  return 5.0f;   }
-        else if (material == Material.NETHER_GOLD_ORE)          {  return 9.0f;   }
-        else if (material == Material.NETHER_QUARTZ_ORE)        {  return 6.0f;   }
-        else if (material == Material.ANCIENT_DEBRIS)           {  return 20.0f;  }
-        else if (material == Material.BEDROCK)                  {  return 100.0f; }
-        return -1.0f;
+        List<String> Lore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "Se rumorea que hace siglos,",
+                ChatColor.WHITE + "un minero excepcional descubrió un mineral extremadamente raro y poderoso",
+                ChatColor.WHITE + "en las profundidades de las minas.",
+                ChatColor.WHITE + "Desde entonces,",
+                ChatColor.WHITE + "los mineros aspiran a encontrar ese mineral legendario",
+                ChatColor.WHITE + "para desbloquear su verdadero potencial."
+        ));
+
+        List<String> descriptionLore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "Para poder subir de nivel y obtener experiencia",
+                ChatColor.WHITE + "tendrás que picar todo tipo de piedras y minerales"
+        ));
+
+        List<String> rewardLvL5Lore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "- Minería Afortunada: Probabilidad de duplicar minerales."
+        ));
+
+        List<String> rewardLvL10Lore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "- 1 Corazón adicional.",
+                ChatColor.WHITE + "- Riquezas Ocultas: probabilidad de encontrar minerales al picar piedra."
+        ));
+
+        List<String> rewardLvL15Lore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "Ninguna"
+        ));
+
+        List<String> rewardLvL20Lore = new ArrayList<>(List.of(
+                ChatColor.WHITE + "- Protección Subterránea: proporciona inmunidad temporal a daños de ",
+                ChatColor.WHITE + "lava y explosiones mientras."
+        ));
+        Inventory inventory = ProfessionManager.getInstance().getServer().createInventory(null, 9 * 3, ChatColor.GREEN + "" + ChatColor.BOLD + getName());
+
+        ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>(), 1);
+        ItemStack professionIcon = createProfessionTypeItem(Material.IRON_PICKAXE, ChatColor.DARK_PURPLE + "Minero", Lore, 1);
+        ItemStack description = createProfessionTypeItem(Material.STONE, ChatColor.WHITE + "Descripción", descriptionLore, 1);
+        ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore, 5);
+        ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore, 10);
+        ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore, 15);
+        ItemStack rewardLvL20 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 20", rewardLvL20Lore, 20);
+        ItemStack buttonAccept = createProfessionTypeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Aceptar", getName(), 1);
+        ItemStack buttonCancel = createProfessionTypeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Cancelar", new ArrayList<>(), 1);
+
+        inventory.setItem(0, professionIcon);
+        inventory.setItem(1, emptyItem);
+        inventory.setItem(2, emptyItem);
+        inventory.setItem(3, rewardLvL5);
+        inventory.setItem(4, rewardLvL10);
+        inventory.setItem(5, rewardLvL15);
+        inventory.setItem(6, rewardLvL20);
+        inventory.setItem(7, emptyItem);
+        inventory.setItem(8, emptyItem);
+        inventory.setItem(9, description);
+        inventory.setItem(10, emptyItem);
+        inventory.setItem(11, emptyItem);
+        inventory.setItem(12, emptyItem);
+        inventory.setItem(13, emptyItem);
+        inventory.setItem(14, emptyItem);
+        inventory.setItem(15, emptyItem);
+        inventory.setItem(16, emptyItem);
+        inventory.setItem(17, emptyItem);
+        inventory.setItem(18, buttonCancel);
+        inventory.setItem(19, emptyItem);
+        inventory.setItem(20, emptyItem);
+        inventory.setItem(21, emptyItem);
+        inventory.setItem(22, emptyItem);
+        inventory.setItem(23, emptyItem);
+        inventory.setItem(24, emptyItem);
+        inventory.setItem(25, emptyItem);
+        inventory.setItem(26, buttonAccept);
+
+        return inventory;
     }
 
-    private Material getAdditionalOre(Material material)
+    @Override
+    public void level5Reward()
     {
-        if (getLevel() >= 5)
-        {
-            if      (material == Material.COAL_ORE)     { return Material.COAL;     }
-            else if (material == Material.IRON_ORE)     { return Material.RAW_IRON; }
-            else if (material == Material.GOLD_ORE)     { return Material.RAW_GOLD; }
-            else if (material == Material.COPPER_ORE)   { return Material.RAW_COPPER; }
-        }
-
-        if (getLevel() >= 10)
-        {
-            if      (material == Material.DIAMOND_ORE)            { return Material.DIAMOND;  }
-            else if (material == Material.EMERALD_ORE)            { return Material.EMERALD;  }
-            else if (material == Material.DEEPSLATE_COAL_ORE)     { return Material.COAL;     }
-            else if (material == Material.DEEPSLATE_IRON_ORE)     { return Material.RAW_IRON; }
-            else if (material == Material.DEEPSLATE_GOLD_ORE)     { return Material.RAW_GOLD; }
-            else if (material == Material.DEEPSLATE_COPPER_ORE)   { return Material.RAW_GOLD; }
-        }
-
-        if (getLevel() >= 15)
-        {
-            if      (material == Material.DEEPSLATE_DIAMOND_ORE)   { return Material.DIAMOND;  }
-            else if (material == Material.DEEPSLATE_EMERALD_ORE)   { return Material.EMERALD;  }
-        }
-
-        return null;
+        // TODO Insignia de profesión lvl 5
     }
 
-    private double getChanceAdditionalOre(Material material)
+    @Override
+    public void level10Reward()
     {
-        // Chance = [0.0, 1.0]
+        // TODO Insignia de profesión lvl 10
+    }
 
-        if (getLevel() == 5)
+    @Override
+    public void level15Reward()
+    {
+        // TODO Insignia de profesión lvl 15
+    }
+
+    @Override
+    public void level20Reward()
+    {
+        // TODO Insignia de profesión lvl 20
+    }
+
+    @Override
+    public void leaveProfession()
+    {
+    }
+
+    private int calculateExperienceByLVL()
+    {
+        if (getLevel() >= 5 && getLevel() < 10)
         {
-            if      (material == Material.COAL_ORE)     { return 0.15; }
-            else if (material == Material.IRON_ORE)     { return 0.15; }
-            else if (material == Material.GOLD_ORE)     { return 0.15; }
-            else if (material == Material.COPPER_ORE)   { return 0.15; }
+            return 3;
+        }
+        else if (getLevel() >= 10 && getLevel() < 15)
+        {
+            return 5;
+        }
+        else if (getLevel() >= 15 && getLevel() < 20)
+        {
+            return 8;
+        }
+        else if (getLevel() >= 20)
+        {
+            return 10;
         }
 
-        if (getLevel() == 10)
+        return 0;
+    }
+
+    private double getChance(BlockDataProfession blockDataProfession)
+    {
+        if (getLevel() >= 20)
         {
-            if      (material == Material.COAL_ORE)               { return 0.20; }
-            else if (material == Material.IRON_ORE)               { return 0.20; }
-            else if (material == Material.GOLD_ORE)               { return 0.20; }
-            else if (material == Material.COPPER_ORE)             { return 0.20; }
-            else if (material == Material.DIAMOND_ORE)            { return 0.15; }
-            else if (material == Material.EMERALD_ORE)            { return 0.15; }
-            else if (material == Material.DEEPSLATE_COAL_ORE)     { return 0.15; }
-            else if (material == Material.DEEPSLATE_IRON_ORE)     { return 0.15; }
-            else if (material == Material.DEEPSLATE_GOLD_ORE)     { return 0.15; }
-            else if (material == Material.DEEPSLATE_COPPER_ORE)   { return 0.15; }
+            return blockDataProfession.chanceLVL20;
+        }
+        else if (getLevel() >= 15)
+        {
+            return blockDataProfession.chanceLVL15;
+        }
+        else if (getLevel() >= 10)
+        {
+            return blockDataProfession.chanceLVL10;
+        }
+        else if (getLevel() >= 5)
+        {
+            return blockDataProfession.chanceLVL5;
         }
 
-        if (getLevel() == 15)
+        return 0;
+    }
+
+    private static Material getMaterial()
+    {
+        Map<Material, Double> TREASURE_PROBABILITIES = new HashMap<>();
+        TREASURE_PROBABILITIES.put(Material.DIAMOND_ORE, 0.3);  // Probabilidad del 30% de diamantes
+        TREASURE_PROBABILITIES.put(Material.GOLD_ORE, 0.2);     // Probabilidad del 20% de oro
+        TREASURE_PROBABILITIES.put(Material.IRON_ORE, 0.25);    // Probabilidad del 25% de hierro
+        TREASURE_PROBABILITIES.put(Material.EMERALD_ORE, 0.15); // Probabilidad del 15% de esmeraldas
+        TREASURE_PROBABILITIES.put(Material.LAPIS_ORE, 0.1);    // Probabilidad del 10% de lapislázuli
+
+        Random random = new Random();
+        double r = random.nextDouble();
+        double cumulativeProbability = 0.0;
+
+        for (Map.Entry<Material, Double> entry : TREASURE_PROBABILITIES.entrySet())
         {
-            if      (material == Material.COAL_ORE)               { return 0.25; }
-            else if (material == Material.IRON_ORE)               { return 0.25; }
-            else if (material == Material.GOLD_ORE)               { return 0.25; }
-            else if (material == Material.COPPER_ORE)             { return 0.20; }
-            else if (material == Material.DIAMOND_ORE)            { return 0.20; }
-            else if (material == Material.EMERALD_ORE)            { return 0.20; }
-            else if (material == Material.REDSTONE_ORE)           { return 0.20; }
-            else if (material == Material.LAPIS_ORE)              { return 0.20; }
-            else if (material == Material.DEEPSLATE_COAL_ORE)     { return 0.20; }
-            else if (material == Material.DEEPSLATE_IRON_ORE)     { return 0.20; }
-            else if (material == Material.DEEPSLATE_GOLD_ORE)     { return 0.20; }
-            else if (material == Material.DEEPSLATE_COPPER_ORE)   { return 0.25; }
-            else if (material == Material.DEEPSLATE_DIAMOND_ORE)  { return 0.15; }
-            else if (material == Material.DEEPSLATE_EMERALD_ORE)  { return 0.18; }
-            else if (material == Material.DEEPSLATE_REDSTONE_ORE) { return 0.20; }
-            else if (material == Material.DEEPSLATE_LAPIS_ORE)    { return 0.20; }
+            cumulativeProbability += entry.getValue();
+            if (r <= cumulativeProbability)
+            {
+                return entry.getKey();
+            }
         }
 
-        if (getLevel() == 20)
+        return Material.IRON_ORE;
+    }
+
+    private double getAdjustedChanceOfTreasure(ItemStack item)
+    {
+        int fortuneLevel = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+
+        // La probabilidad aumenta en un 10% por cada nivel de "Fortuna"
+        double chanceIncreasePerFortuneLevel = 0.1;
+
+        double adjustedChance = 0.1 + (fortuneLevel * chanceIncreasePerFortuneLevel);
+
+        // Limitar la probabilidad máxima a 100%
+        if (adjustedChance > 1.0)
         {
-            if      (material == Material.COAL_ORE)               { return 0.30; }
-            else if (material == Material.IRON_ORE)               { return 0.28; }
-            else if (material == Material.GOLD_ORE)               { return 0.28; }
-            else if (material == Material.COPPER_ORE)             { return 0.20; }
-            else if (material == Material.DIAMOND_ORE)            { return 0.25; }
-            else if (material == Material.EMERALD_ORE)            { return 0.25; }
-            else if (material == Material.REDSTONE_ORE)           { return 0.20; }
-            else if (material == Material.LAPIS_ORE)              { return 0.20; }
-            else if (material == Material.DEEPSLATE_COAL_ORE)     { return 0.25; }
-            else if (material == Material.DEEPSLATE_IRON_ORE)     { return 0.23; }
-            else if (material == Material.DEEPSLATE_GOLD_ORE)     { return 0.23; }
-            else if (material == Material.DEEPSLATE_COPPER_ORE)   { return 0.25; }
-            else if (material == Material.DEEPSLATE_DIAMOND_ORE)  { return 0.20; }
-            else if (material == Material.DEEPSLATE_EMERALD_ORE)  { return 0.20; }
-            else if (material == Material.DEEPSLATE_REDSTONE_ORE) { return 0.20; }
-            else if (material == Material.DEEPSLATE_LAPIS_ORE)    { return 0.20; }
+            adjustedChance = 1.0;
         }
 
-        return -1;
+        return adjustedChance;
+    }
+
+    private void duplicateItem(BlockBreakEvent event, BlockDataProfession blockDataProfession)
+    {
+        if (blockDataProfession.allowedDuplicate)
+        {
+            Material material = Material.getMaterial(blockDataProfession.materialDuplicate);
+            Random random = new Random();
+            if (material != null && random.nextDouble() <= getChance(blockDataProfession))
+            {
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(material));
+            }
+        }
+    }
+
+    private void UndergroundProtection()
+    {
+    }
+
+    private ItemStack CreateLuminaritaElfica()
+    {
+        ItemStack item = new ItemStack(Material.PRISMARINE_SHARD);
+        ItemMeta meta = item.getItemMeta();
+
+        String description = "Mineral extremadamente raro y poderoso" + "se desconoce su uso, pero se siente su poder";
+        List<String> lore = new ArrayList<>();
+        lore.add(description);
+
+        Objects.requireNonNull(meta).setDisplayName(ChatColor.DARK_PURPLE + "Luminarita Elfica");
+        Objects.requireNonNull(meta).setLore(lore);
+        Objects.requireNonNull(meta).setCustomModelData(1);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 }
-

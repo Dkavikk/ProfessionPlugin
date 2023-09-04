@@ -1,17 +1,21 @@
 package org.vac.professionplugin.professions;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.Inventory;
 
-public abstract class Profession {
+import java.util.Objects;
+
+public abstract class Profession
+{
+
     private final String name;
     private int level;
     private float exp;
     private boolean levelUp;
-
     private final Player player;
 
     // Constantes
@@ -30,24 +34,26 @@ public abstract class Profession {
     {
         return name;
     }
+
     public int getLevel()
     {
         return level;
     }
+
     public float getExp()
     {
         return exp;
     }
+
     public boolean getLevelUp()
     {
         return levelUp;
     }
+
     public Player getPlayer()
     {
         return player;
     }
-
-
 
     // Método para calcular la experiencia requerida para alcanzar un nivel dado
     public static int requiredExperience(int level)
@@ -59,7 +65,6 @@ public abstract class Profession {
     {
         this.exp += experienceGained;
 
-        player.sendMessage("has resivido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
         // Incremento de experiencia requerida por nivel
         int experienceNextLevel = requiredExperience(this.level);
         if (this.exp >= experienceNextLevel)
@@ -69,9 +74,10 @@ public abstract class Profession {
             this.levelUp = true;
             newLevel();
         }
+        player.sendMessage("has recibido " + experienceGained + " de xp, ahora tu experiencia es de " + this.exp);
     }
 
-    public static Profession getProfessionByName(String name, int level, float exp ,Player player)
+    public static Profession getProfessionByName(String name, int level, float exp, Player player)
     {
         if (name.equals("Minero"))
         {
@@ -87,12 +93,115 @@ public abstract class Profession {
         }
     }
 
-    public abstract void performProfessionAction(BlockBreakEvent event);
-    public abstract void performProfessionAction(EntityDeathEvent event);
-    public abstract void newLevel();
-    public abstract void startRepeatTasks();
-    public abstract void Level5Reward();
-    public abstract void Level10Reward();
-    public abstract void Level15Reward();
-    public abstract void Level20Reward();
+    // Métodos abstractos para eventos y recompensas específicas de cada profesión
+    public abstract Inventory getInventoryProfessionData();
+
+    public abstract void onPlayerMove(PlayerMoveEvent event);
+
+    public abstract void onBlockBreak(BlockBreakEvent event);
+
+    public abstract void onEntityDeath(EntityDeathEvent event);
+
+    public abstract void onEntityDamage(EntityDamageByEntityEvent event);
+    public abstract void onEntityDamage(EntityDamageEvent event);
+
+    public abstract void onPlayerShootBow(EntityShootBowEvent event);
+
+    public abstract void onEntityExplode(EntityExplodeEvent event);
+
+    public abstract void onEntityBreed(EntityBreedEvent event);
+
+    public abstract void level5Reward();
+
+    public abstract void level10Reward();
+
+    public abstract void level15Reward();
+
+    public abstract void level20Reward();
+
+    public abstract void leaveProfession();
+
+    public boolean belongToProfession(BlockDataProfession data)
+    {
+        if (data.allowedMiner && Objects.equals(name, "Minero"))
+        {
+            return true;
+        }
+        else if (data.allowedHunter && Objects.equals(name, "Cazador"))
+        {
+            return true;
+        }
+        else if (data.allowedC && Objects.equals(name, "c"))
+        {
+            return true;
+        }
+        else if (data.allowedD && Objects.equals(name, "d"))
+        {
+            return true;
+        }
+        else if (data.allowedE && Objects.equals(name, "e"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean belongToProfession(EntityDataProfession data)
+    {
+        if (data.allowedMiner && Objects.equals(name, "Minero"))
+        {
+            return true;
+        }
+        else if (data.allowedHunter && Objects.equals(name, "Cazador"))
+        {
+            return true;
+        }
+        else if (data.allowedC && Objects.equals(name, "c"))
+        {
+            return true;
+        }
+        else if (data.allowedD && Objects.equals(name, "d"))
+        {
+            return true;
+        }
+        else if (data.allowedE && Objects.equals(name, "e"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void newLevel()
+    {
+        // TODO Add money economy system
+
+        player.sendMessage(ChatColor.GREEN + "Has subido de nivel ");
+        player.sendMessage(ChatColor.GREEN + "Ahora eres nivel: " + level);
+
+        if (getLevel() == 5)
+        {
+            level5Reward();
+        }
+
+        if (getLevel() == 10)
+        {
+            level10Reward();
+        }
+
+        if (getLevel() == 15)
+        {
+            level15Reward();
+        }
+
+        if (getLevel() == 20)
+        {
+            level20Reward();
+        }
+    }
 }

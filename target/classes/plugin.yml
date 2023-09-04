@@ -1,5 +1,5 @@
 name: ProfessionPlugin
-version: '1.0'
+version: '1.1'
 main: org.vac.professionplugin.ProfessionManager
 api-version: '1.20'
 
