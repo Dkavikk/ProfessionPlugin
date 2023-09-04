@@ -118,7 +118,7 @@ public class Farmer extends Profession
     @Override
     public void onBlockPlace(BlockPlaceEvent event)
     {
-        if (getLevel() >= 10)
+        if (getLevel() >= 20)
         {
             if (event.getBlock().getBlockData() instanceof Ageable)
             {
