@@ -120,26 +120,19 @@ public class Farmer extends Profession
     @Override
     public void onBlockPlace(BlockPlaceEvent event)
     {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] - Pre");
-
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] Pre - if Ageable");
-        if (event.getBlock().getBlockData() instanceof Ageable)
+        if (getLevel() >= 10)
         {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] In - if Ageable");
-
-            event.getBlock().setMetadata("PlantOwner", new FixedMetadataValue(ProfessionManager.getInstance(), getPlayer().getName()));
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] Final - if Ageable");
+            if (event.getBlock().getBlockData() instanceof Ageable)
+            {
+                event.getBlock().setMetadata("PlantOwner", new FixedMetadataValue(ProfessionManager.getInstance(), getPlayer().getName()));
+            }
         }
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] Post - if Ageable");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockPlace] - Post");
     }
 
     @Override
     public void onBlockGrow(BlockGrowEvent event)
     {
         Block block = event.getBlock();
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockGrow] 3");
         double growthSpeed = 5;
 
         // Cancelamos el evento de crecimiento y programamos el crecimiento nuevamente con la velocidad ajustada.
@@ -147,16 +140,13 @@ public class Farmer extends Profession
         int growthTicks = (int) Math.ceil(1 / growthSpeed); // Convertimos la velocidad a ticks.
         Bukkit.getScheduler().scheduleSyncDelayedTask(ProfessionManager.getInstance(), () ->
         {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockGrow] Rutina - 1");
             Ageable ageable = (Ageable) block.getBlockData();
             if (ageable.getAge() == ageable.getMaximumAge())
             {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockGrow] Rutina - 2");
                 block.setType(block.getType()); // Establecemos el tipo del bloque para refrescar el crecimiento.
             }
             else
             {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[onBlockGrow] Rutina - 3");
                 if (ageable.getAge() + 2 >  ageable.getMaximumAge())
                 {
                     ageable.setAge(ageable.getMaximumAge());
