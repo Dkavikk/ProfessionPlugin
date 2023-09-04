@@ -12,6 +12,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.vac.professionplugin.commands.*;
 import org.vac.professionplugin.custom_items.InteractionCustomItemsListener;
 import org.vac.professionplugin.inventory.ProfessionInventoryController;
@@ -27,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.vac.professionplugin.professions.UndergroundProtection;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -215,6 +217,7 @@ public class ProfessionManager extends JavaPlugin implements Listener
         Player player = event.getPlayer();
         Profession profession = DataBase.getPlayerProfession(player);
 
+        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + profession.getName());
         if (profession != null)
         {
             profession.onBlockPlace(event);
@@ -224,31 +227,29 @@ public class ProfessionManager extends JavaPlugin implements Listener
     @EventHandler
     public void onBlockGrow(BlockGrowEvent event)
     {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 0");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] -" + event.getBlock().getType());
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] - Pre");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] - Block Type: " + event.getBlock().getType());
         Block block = event.getBlock();
-        if (block.getType() == Material.WHEAT || block.getType() == Material.POTATOES || block.getType() == Material.CARROTS)
+        // Obtenemos el jugador que plantó el cultivo de los metadatos.
+        if (block.hasMetadata("PlantOwner"))
         {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 1");
-            // Obtenemos el jugador que plantó el cultivo de los metadatos.
-            if (block.hasMetadata("PlantOwner"))
+            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] in - if (PlantOwner)");
+            String plantOwner = block.getMetadata("PlantOwner").get(0).asString();
+
+            // Verificamos si el jugador está en línea y obtenemos su nivel de crecimiento.
+            Player player = Bukkit.getPlayerExact(plantOwner);
+            if (player != null)
             {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] 2");
-                String plantOwner = block.getMetadata("PlantOwner").get(0).asString();
+                Profession profession = DataBase.getPlayerProfession(player);
 
-                // Verificamos si el jugador está en línea y obtenemos su nivel de crecimiento.
-                Player player = Bukkit.getPlayerExact(plantOwner);
-                if (player != null)
+                if (profession != null)
                 {
-                    Profession profession = DataBase.getPlayerProfession(player);
-
-                    if (profession != null)
-                    {
-                        profession.onBlockGrow(event);
-                    }
+                    profession.onBlockGrow(event);
                 }
             }
         }
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[onBlockGrow] - pos");
     }
 
     public Map<Player, UndergroundProtection> getPlayerUndergroundProtectionMap()

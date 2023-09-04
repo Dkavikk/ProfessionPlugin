@@ -107,7 +107,8 @@ public class ProfessionDataBase
             {
                 professionName = resultSet.getString("profession_name");
                 level = resultSet.getInt("profession_level");
-                exp = resultSet.getInt("profession_exp");
+                exp = resultSet.getFloat("profession_exp");
+
                 profession = Profession.getProfessionByName(professionName, level, exp, player);
             }
 
@@ -117,7 +118,7 @@ public class ProfessionDataBase
         catch (SQLException e)
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to get profession: " + e.getMessage());
-            player.sendMessage(ChatColor.RED + "Fallo al tratar de obtener la profesio");
+            player.sendMessage(ChatColor.RED + "Fallo al tratar de obtener la profesio"); //TODO mensaje para volver a intenter y si el error persiste avisar
         }
 
         return profession;

@@ -33,11 +33,6 @@ public class Miner extends Profession
     @Override
     public void onPlayerMove(PlayerMoveEvent event)
     {
-        //        if (getPlayer().getLocation().getBlock().getType() == Material.LAVA)
-        //        {
-        //            UndergroundProtection protection = ProfessionManager.getInstance().getPlayerUndergroundProtectionMap().get(getPlayer());
-        //            protection.activate();
-        //        }
     }
 
     @Override

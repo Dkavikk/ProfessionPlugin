@@ -85,6 +85,10 @@ public abstract class Profession
         {
             return new Miner(level, exp, player);
         }
+        else if (name.equals("Granjero"))
+        {
+            return new Farmer(level, exp, player);
+        }
         else if (name.equals("Cazador"))
         {
             return new Hunter(level, exp, player);
@@ -98,6 +102,7 @@ public abstract class Profession
     // Métodos abstractos para eventos y recompensas específicas de cada profesión
     public abstract Inventory getInventoryProfessionData();
 
+    // TODO Removed
     public abstract void onPlayerMove(PlayerMoveEvent event);
 
     public abstract void onBlockBreak(BlockBreakEvent event);
