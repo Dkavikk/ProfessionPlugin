@@ -32,41 +32,39 @@ public class Farmer extends Profession
     public Inventory getInventoryProfessionData()
     {
         List<String> Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "Se rumorea que hace siglos,",
-                ChatColor.WHITE + "un minero excepcional descubrió un mineral extremadamente raro y poderoso",
-                ChatColor.WHITE + "en las profundidades de las minas.",
-                ChatColor.WHITE + "Desde entonces,",
-                ChatColor.WHITE + "los mineros aspiran a encontrar ese mineral legendario",
-                ChatColor.WHITE + "para desbloquear su verdadero potencial."
+                ChatColor.WHITE + "Eres el último descendiente de una antigua familia",
+                ChatColor.WHITE + "de granjeros que ha cultivado esta tierra durante generaciones.",
+                ChatColor.WHITE + "Tu abuelo te enseñó todos los secretos de la agricultura y ",
+                ChatColor.WHITE + "te dejó a cargo de esta granja.",
+                ChatColor.WHITE + "Tu objetivo es mantener viva la tradición familiar y",
+                ChatColor.WHITE + "hacer que la granja prospere."
         ));
 
         List<String> descriptionLore = new ArrayList<>(List.of(
                 ChatColor.WHITE + "Para poder subir de nivel y obtener experiencia",
-                ChatColor.WHITE + "tendrás que picar todo tipo de piedras y minerales"
+                ChatColor.WHITE + "tendrás que cosechar y conseguir ganaderia"
         ));
 
         List<String> rewardLvL5Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "- Minería Afortunada: Probabilidad de duplicar minerales."
+                ChatColor.WHITE + "- Semillas Cautivas: Probabilidad de semillas al romper pasto."
         ));
 
         List<String> rewardLvL10Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "- 1 Corazón adicional.",
-                ChatColor.WHITE + "- Riquezas Ocultas: probabilidad de encontrar minerales al picar piedra."
+                ChatColor.WHITE + "- Sazón Natural: La comida elaborada artesanalmente alimenta mejor al consumidor."
         ));
 
         List<String> rewardLvL15Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "Ninguna"
+                ChatColor.WHITE + "- Efecto Gemelo: probabilidad de duplicar los cultivos y el ganado"
         ));
 
         List<String> rewardLvL20Lore = new ArrayList<>(List.of(
-                ChatColor.WHITE + "- Protección Subterránea: proporciona inmunidad temporal a daños de ",
-                ChatColor.WHITE + "lava y explosiones mientras."
+                ChatColor.WHITE + "- Crecimiento Frenético: Tus cultivos crecen más rápido de lo normal."
         ));
         Inventory inventory = ProfessionManager.getInstance().getServer().createInventory(null, 9 * 3, ChatColor.GREEN + "" + ChatColor.BOLD + getName());
 
         ItemStack emptyItem = createProfessionTypeItem(Material.BLACK_STAINED_GLASS_PANE, " ", new ArrayList<>(), 1);
-        ItemStack professionIcon = createProfessionTypeItem(Material.IRON_PICKAXE, ChatColor.DARK_PURPLE + "Granjero", Lore, 1);
-        ItemStack description = createProfessionTypeItem(Material.STONE, ChatColor.WHITE + "Descripción", descriptionLore, 1);
+        ItemStack professionIcon = createProfessionTypeItem(Material.IRON_HOE, ChatColor.DARK_PURPLE + "Granjero", Lore, 1);
+        ItemStack description = createProfessionTypeItem(Material.WHEAT, ChatColor.WHITE + "Descripción", descriptionLore, 1);
         ItemStack rewardLvL5 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 5", rewardLvL5Lore, 5);
         ItemStack rewardLvL10 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 10", rewardLvL10Lore, 10);
         ItemStack rewardLvL15 = createProfessionTypeItem(Material.EXPERIENCE_BOTTLE, ChatColor.AQUA + "Recompensa de LvL 15", rewardLvL15Lore, 15);
